@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# This script updates the expected outputs for the smoke tests.
+# It runs the test-sentinel generate command in the sample app
+# and copies the generated output to the expected_outputs directory.
+
+set -e
+
+PROJECT_ROOT=$(dirname "$(dirname "$(readlink -f "$0")")")
+SAMPLE_APP_DIR="${PROJECT_ROOT}/smoke/sample_app"
+EXPECTED_OUTPUTS_DIR="${PROJECT_ROOT}/expected_outputs"
+
+echo "Updating smoke test outputs..."
+
+# Navigate to the sample app directory
+cd "${SAMPLE_APP_DIR}"
+
+# Run test-sentinel generate and redirect output to expected_outputs/smoke_test_output.txt
+# Suppress stderr from test-sentinel itself, but allow script errors to show
+bundle exec test-sentinel generate --top-n 10 > "${EXPECTED_OUTPUTS_DIR}/smoke_test_output.txt" 2>/dev/null
+
+# Copy the generated JSON analysis file
+cp test_sentinel_analysis.json "${EXPECTED_OUTPUTS_DIR}/smoke_test_analysis.json"
+
+echo "Smoke test outputs updated successfully!"
+
+# Navigate back to the project root (optional, but good practice)
+cd "${PROJECT_ROOT}"

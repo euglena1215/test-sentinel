@@ -1,10 +1,10 @@
-🔍 Analyzing codebase in ./smoke/sample_app...
+🔍 Analyzing codebase in /Users/teppei/workspace/src/github.com/euglena1215/test-sentinel/smoke/sample_app...
 
-📊 Top 5 methods requiring test coverage:
+📊 Top 10 methods requiring test coverage:
 
 1. app/models/user.rb:21
    Method: can_access_feature?
-   Priority Score: 10.3
+   Priority Score: 10.9
    Coverage: 0.0%
    Complexity: 7
    Git Commits: 0
@@ -21,9 +21,23 @@
      - active?がtrueの場合
      - active?がfalseの場合
 
-2. app/services/payment_service.rb:8
+2. app/models/user.rb:35
+   Method: calculate_discount
+   Priority Score: 7.9
+   Coverage: 0.0%
+   Complexity: 4
+   Git Commits: 0
+   Suggested test scenarios:
+     - premium?がtrueの場合
+     - premium?がfalseの場合
+     - admin?がtrueの場合
+     - admin?がfalseの場合
+     - created_at < 1.year.agoがtrueの場合
+     - created_at < 1.year.agoがfalseの場合
+
+3. app/services/payment_service.rb:8
    Method: calculate_fee
-   Priority Score: 8.3
+   Priority Score: 7.7
    Coverage: 0.0%
    Complexity: 5
    Git Commits: 0
@@ -37,9 +51,9 @@
      - monthly_transaction_count >= 10がtrueの場合
      - monthly_transaction_count >= 10がfalseの場合
 
-3. app/services/payment_service.rb:28
+4. app/services/payment_service.rb:28
    Method: process_payment
-   Priority Score: 8.3
+   Priority Score: 7.7
    Coverage: 0.0%
    Complexity: 5
    Git Commits: 0
@@ -51,23 +65,9 @@
      - payment_methodが'paypal'の場合
      - payment_methodがその他の値の場合
 
-4. app/models/user.rb:35
-   Method: calculate_discount
-   Priority Score: 7.3
-   Coverage: 0.0%
-   Complexity: 4
-   Git Commits: 0
-   Suggested test scenarios:
-     - premium?がtrueの場合
-     - premium?がfalseの場合
-     - admin?がtrueの場合
-     - admin?がfalseの場合
-     - created_at < 1.year.agoがtrueの場合
-     - created_at < 1.year.agoがfalseの場合
-
 5. app/controllers/users_controller.rb:6
    Method: index
-   Priority Score: 3.7
+   Priority Score: 4.3
    Coverage: 0.0%
    Complexity: 1
    Git Commits: 0
@@ -78,5 +78,55 @@
      - params[:premium].present?がfalseの場合
      - present?がtrueの場合
      - present?がfalseの場合
+
+6. app/controllers/users_controller.rb:16
+   Method: show
+   Priority Score: 4.3
+   Coverage: 0.0%
+   Complexity: 1
+   Git Commits: 0
+   Suggested test scenarios:
+     - current_user.admin? || current_user == @userがtrueの場合
+     - current_user.admin? || current_user == @userがfalseの場合
+     - admin?がtrueの場合
+     - admin?がfalseの場合
+
+7. app/controllers/users_controller.rb:23
+   Method: create
+   Priority Score: 4.3
+   Coverage: 0.0%
+   Complexity: 1
+   Git Commits: 0
+   Suggested test scenarios:
+     - saveがtrueの場合
+     - saveがfalseの場合
+     - params[:send_welcome_email]がtrueの場合
+     - params[:send_welcome_email]がfalseの場合
+
+8. app/controllers/users_controller.rb:34
+   Method: update
+   Priority Score: 4.3
+   Coverage: 0.0%
+   Complexity: 1
+   Git Commits: 0
+   Suggested test scenarios:
+     - update(user_params)がtrueの場合
+     - update(user_params)がfalseの場合
+     - user_params[:status] == 'suspended'がtrueの場合
+     - user_params[:status] == 'suspended'がfalseの場合
+
+9. app/controllers/users_controller.rb:45
+   Method: set_user
+   Priority Score: 4.3
+   Coverage: 0.0%
+   Complexity: 1
+   Git Commits: 0
+
+10. app/controllers/users_controller.rb:49
+   Method: user_params
+   Priority Score: 4.3
+   Coverage: 0.0%
+   Complexity: 1
+   Git Commits: 0
 
 📄 Detailed analysis saved to test_sentinel_analysis.json

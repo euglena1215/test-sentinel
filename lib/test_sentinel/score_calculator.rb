@@ -11,7 +11,14 @@ module TestSentinel
     def calculate(coverage_data:, complexity_data:, git_data:)
       results = []
 
-      all_files = (coverage_data.keys + complexity_data.keys + git_data.keys).uniq
+      all_files = (
+        Dir.glob('app/**/*.rb') +
+        Dir.glob('lib/**/*.rb') +
+        Dir.glob('packs/**/*.rb') +
+        coverage_data.keys +
+        complexity_data.keys +
+        git_data.keys
+      ).uniq
 
       all_files.each do |file_path|
         next if @config.excluded?(file_path)

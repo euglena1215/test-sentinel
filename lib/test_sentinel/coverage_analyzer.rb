@@ -48,6 +48,9 @@ module TestSentinel
         elsif file_path.include?('/lib/')
           relative_path = file_path.split('/lib/').last
           relative_path = "lib/#{relative_path}" if relative_path
+        elsif file_path.include?('/packs/')
+          relative_path = file_path.split('/packs/').last
+          relative_path = "packs/#{relative_path}" if relative_path
         else
           relative_path = file_path
         end
