@@ -128,3 +128,7 @@ Test Sentinel uses `sentinel.yml` for configuration. Key sections:
 - CLI includes `--directory` option to analyze projects outside the current directory
 - SimpleCov coverage data is required; tests must be run first to generate `.resultset.json`
 - RuboCop must be available (tries `bundle exec rubocop` first, falls back to `rubocop`)
+
+## Memories
+
+- RSpec における -v オプションはバージョンを表示するオプションです。テストを実行したいときに利用するオプションではありません。

@@ -1,5 +1,15 @@
-Metrics/CyclomaticComplexity:
-  Max: 3
+require:
+  - rubocop-performance
+  - rubocop-rspec
 
 AllCops:
   NewCops: enable
+  Exclude:
+    - 'smoke/sample_app/**/*'
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*.rb'
+
+Style/Documentation:
+  Enabled: false

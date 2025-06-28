@@ -62,7 +62,7 @@ module TestSentinel
           relative_path = file_path
         end
 
-        next unless relative_path && (relative_path.start_with?('app/') || relative_path.start_with?('lib/'))
+        next unless relative_path&.start_with?('app/', 'lib/')
 
         file_data['offenses'].each do |offense|
           next unless offense['cop_name'] == 'Metrics/CyclomaticComplexity'

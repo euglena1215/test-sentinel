@@ -5,6 +5,106 @@ require 'test_sentinel/scenario_generator'
 require 'tempfile'
 
 RSpec.describe TestSentinel::ScenarioGenerator do
+  describe '#generate' do
+    let(:temp_file) { Tempfile.new(['test_file', '.rb']) }
+
+    after { temp_file.unlink }
+
+    context 'with complex method containing if statements and case' do
+      let(:file_content) do
+        <<~RUBY
+          class User
+            def can_access_feature?(feature_name)
+              return false if inactive? || suspended?
+              return true if admin?
+
+              case feature_name
+              when 'analytics'
+                premium?
+              when 'export'
+                premium? || active?
+              else
+                active?
+              end
+            end
+          end
+        RUBY
+      end
+
+      it 'generates comprehensive test scenarios' do
+        temp_file.write(file_content)
+        temp_file.rewind
+
+        scenarios = described_class.generate_for_method(temp_file.path, 'can_access_feature?', 2)
+
+        expect(scenarios).to include('inactive? || suspended?がtrueの場合')
+        expect(scenarios).to include('inactive? || suspended?がfalseの場合')
+        expect(scenarios).to include('admin?がtrueの場合')
+        expect(scenarios).to include('admin?がfalseの場合')
+        expect(scenarios).to include("feature_nameが'analytics'の場合")
+        expect(scenarios).to include("feature_nameが'export'の場合")
+        expect(scenarios).to include('feature_nameがその他の値の場合')
+        expect(scenarios).to include('premium?がtrueの場合')
+        expect(scenarios).to include('premium?がfalseの場合')
+        expect(scenarios).to include('active?がtrueの場合')
+        expect(scenarios).to include('active?がfalseの場合')
+      end
+    end
+
+    context 'with method containing only boolean checks' do
+      let(:file_content) do
+        <<~RUBY
+          class PaymentService
+            def can_process?(user)
+              user.present? && !user.locked? && user.admin?
+            end
+          end
+        RUBY
+      end
+
+      it 'generates scenarios for boolean method calls' do
+        temp_file.write(file_content)
+        temp_file.rewind
+
+        scenarios = described_class.generate_for_method(temp_file.path, 'can_process?', 2)
+
+        expect(scenarios).to include('present?がtrueの場合')
+        expect(scenarios).to include('present?がfalseの場合')
+        expect(scenarios).to include('locked?がtrueの場合')
+        expect(scenarios).to include('locked?がfalseの場合')
+        expect(scenarios).to include('admin?がtrueの場合')
+        expect(scenarios).to include('admin?がfalseの場合')
+      end
+    end
+
+    context 'with non-existent file' do
+      it 'returns empty array' do
+        scenarios = described_class.generate_for_method('/non/existent/file.rb', 'method', 1)
+        expect(scenarios).to eq([])
+      end
+    end
+
+    context 'with simple method without conditions' do
+      let(:file_content) do
+        <<~RUBY
+          class Calculator
+            def add(a, b)
+              a + b
+            end
+          end
+        RUBY
+      end
+
+      it 'returns empty scenarios' do
+        temp_file.write(file_content)
+        temp_file.rewind
+
+        scenarios = described_class.generate_for_method(temp_file.path, 'add', 2)
+        expect(scenarios).to eq([])
+      end
+    end
+  end
+
   describe '#extract_method_code' do
     let(:temp_file) { Tempfile.new(['test_file', '.rb']) }
 

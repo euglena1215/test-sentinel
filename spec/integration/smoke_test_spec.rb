@@ -18,91 +18,40 @@ RSpec.describe 'Smoke Test Integration' do
   end
 
   describe 'CLI output consistency' do
-    it 'produces expected console output format' do
-      output = nil
+    let(:command_output) do
       Dir.chdir(SAMPLE_APP_DIR) do
-        output = `bundle exec test-sentinel generate --top-n 3 2>/dev/null`
+        `bundle exec test-sentinel generate --top-n 5 2>/dev/null`
       end
-
-      expect(output).to include('🔍 Analyzing codebase...')
-      expect(output).to include('📊 Top 3 methods requiring test coverage:')
-      expect(output).to include('app/models/user.rb:19')
-      expect(output).to include('Method: can_access_feature?')
-      expect(output).to include('Priority Score:')
-      expect(output).to include('Coverage:')
-      expect(output).to include('Complexity:')
-      expect(output).to include('Git Commits:')
-      expect(output).to include('📄 Detailed analysis saved to test_sentinel_analysis.json')
     end
 
-    it 'generates consistent JSON structure' do
-      Dir.chdir(SAMPLE_APP_DIR) do
-        system('bundle exec test-sentinel generate --top-n 5 2>/dev/null')
-      end
+    let(:generated_json_path) { File.join(SAMPLE_APP_DIR, 'test_sentinel_analysis.json') }
+    let(:generated_json) { JSON.parse(File.read(generated_json_path)) }
+    let(:expected_json) { JSON.parse(File.read(EXPECTED_JSON_FILE)) }
 
-      json_file = File.join(SAMPLE_APP_DIR, 'test_sentinel_analysis.json')
-      expect(File.exist?(json_file)).to be true
-
-      analysis = JSON.parse(File.read(json_file))
-
-      expect(analysis).to be_an(Array)
-      expect(analysis.length).to be >= 3
-
-      # Check first result (highest priority)
-      top_result = analysis.first
-      expect(top_result).to include(
-        'file_path' => 'app/models/user.rb',
-        'method_name' => 'can_access_feature?',
-        'line_number' => 19,
-        'class_name' => 'User'
-      )
-
-      expect(top_result['score']).to be > 9.0
-      expect(top_result['details']).to include('coverage', 'complexity', 'git_commits')
-      expect(top_result['details']['complexity']).to eq(7)
+    before do
+      # Run the command to generate output files for each test
+      command_output
     end
-  end
 
-  describe 'score calculation consistency' do
+    it 'produces expected console output' do
+      # Replace the absolute path with a placeholder for consistent comparison
+      normalized_output = command_output.gsub(/Analyzing codebase in .*sample_app/,
+                                              'Analyzing codebase in ./smoke/sample_app')
+      expected_output = File.read(EXPECTED_OUTPUT_FILE)
+
+      expect(normalized_output).to eq(expected_output)
+    end
+
+    it 'generates a JSON file with the expected content' do
+      expect(File.exist?(generated_json_path)).to be true
+      expect(generated_json).to eq(expected_json)
+    end
+
     it 'maintains consistent priority scoring' do
-      Dir.chdir(SAMPLE_APP_DIR) do
-        system('bundle exec test-sentinel generate --top-n 10 2>/dev/null')
-      end
-
-      json_file = File.join(SAMPLE_APP_DIR, 'test_sentinel_analysis.json')
-      analysis = JSON.parse(File.read(json_file))
-
-      # Verify scores are in descending order
-      scores = analysis.map { |item| item['score'] }
+      # This is implicitly tested by the full JSON comparison,
+      # but an explicit check remains useful for clarity.
+      scores = generated_json.map { |item| item['score'] }
       expect(scores).to eq(scores.sort.reverse)
-
-      # Verify expected top methods
-      top_3_methods = analysis.first(3).map { |item| "#{item['file_path']}:#{item['method_name']}" }
-      expect(top_3_methods).to include('app/models/user.rb:can_access_feature?')
-      expect(top_3_methods).to include('app/services/payment_service.rb:calculate_fee')
-      expect(top_3_methods).to include('app/services/payment_service.rb:process_payment')
-    end
-
-    it 'correctly weights complexity vs coverage' do
-      Dir.chdir(SAMPLE_APP_DIR) do
-        system('bundle exec test-sentinel generate --top-n 10 2>/dev/null')
-      end
-
-      json_file = File.join(SAMPLE_APP_DIR, 'test_sentinel_analysis.json')
-      analysis = JSON.parse(File.read(json_file))
-
-      # Find the can_access_feature? method (highest complexity)
-      can_access_feature = analysis.find { |item| item['method_name'] == 'can_access_feature?' }
-      expect(can_access_feature).not_to be_nil
-      expect(can_access_feature['details']['complexity']).to eq(7)
-
-      # Find a calculate_fee method (medium complexity)
-      calculate_fee = analysis.find { |item| item['method_name'] == 'calculate_fee' }
-      expect(calculate_fee).not_to be_nil
-      expect(calculate_fee['details']['complexity']).to eq(5)
-
-      # Higher complexity method should have higher score (given similar coverage)
-      expect(can_access_feature['score']).to be > calculate_fee['score']
     end
   end
 
@@ -143,7 +92,7 @@ RSpec.describe 'Smoke Test Integration' do
         output = `bundle exec test-sentinel generate --top-n 3 2>/dev/null`
 
         # Should still work, just with different scores
-        expect(output).to include('🔍 Analyzing codebase...')
+        expect(output).to include('🔍 Analyzing codebase')
         expect(output).to include('📊 Top 3 methods requiring test coverage:')
 
         # Restore coverage data
