@@ -27,6 +27,17 @@ bundle install
 
 ## 📋 Usage
 
+### Setup
+
+First, generate a configuration file for your project:
+
+```bash
+# Auto-detect project type and generate sentinel.yml
+bundle exec test-sentinel install
+```
+
+This command automatically detects whether you're working with a Rails application or a Ruby gem and generates an appropriate configuration file.
+
 ### Basic Analysis
 
 ```bash
@@ -38,6 +49,11 @@ bundle exec test-sentinel generate --top-n 10
 
 # Use custom config file
 bundle exec test-sentinel generate --config custom_sentinel.yml
+
+# Output in different formats
+bundle exec test-sentinel generate --format json
+bundle exec test-sentinel generate --format csv
+bundle exec test-sentinel generate --format table
 ```
 
 ### Sample Output
@@ -185,10 +201,23 @@ bundle exec rspec spec/integration/
 
 Test Sentinel includes a comprehensive smoke test suite that validates functionality against a sample Rails application in the `smoke/sample_app` directory.
 
-## 📊 Output Format
+## 📊 Output Formats
 
-Test Sentinel generates a JSON file with detailed analysis:
+Test Sentinel supports multiple output formats for flexibility:
 
+### Human-readable (default)
+```
+📊 Top 3 methods requiring test coverage:
+
+1. app/models/user.rb:19
+   Method: can_access_feature?
+   Priority Score: 9.55
+   Coverage: 50.0%
+   Complexity: 7
+   Git Commits: 0
+```
+
+### JSON Format
 ```json
 [
   {
@@ -201,10 +230,30 @@ Test Sentinel generates a JSON file with detailed analysis:
       "coverage": 0.5,
       "complexity": 7,
       "git_commits": 0
-    },
-    "suggested_scenarios": []
+    }
   }
 ]
+```
+
+### CSV Format
+```csv
+file_path,method_name,line_number,score,coverage,complexity,git_commits
+app/models/user.rb,can_access_feature?,19,9.55,50.0,7,0
+```
+
+### Table Format
+```
++-------------------+----------------------+------+-------+----------+------------+----------+
+| File              | Method               | Line | Score | Coverage | Complexity | Commits  |
++-------------------+----------------------+------+-------+----------+------------+----------+
+| app/models/user.rb| can_access_feature?  |   19 |  9.55 |    50.0% |          7 |        0 |
++-------------------+----------------------+------+-------+----------+------------+----------+
+```
+
+All formats can be redirected to files using standard Unix redirection:
+```bash
+bundle exec test-sentinel generate --format json > analysis.json
+bundle exec test-sentinel generate --format csv > analysis.csv
 ```
 
 ## 🤝 Contributing
