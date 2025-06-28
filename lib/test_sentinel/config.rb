@@ -28,7 +28,7 @@ module TestSentinel
     end
 
     def excluded?(file_path)
-      @exclude_patterns.any? { |pattern| File.fnmatch(pattern, file_path) }
+      @exclude_patterns.any? { |pattern| File.fnmatch(pattern, file_path, File::FNM_PATHNAME) }
     end
 
     private

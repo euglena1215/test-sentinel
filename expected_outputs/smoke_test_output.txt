@@ -1,40 +1,82 @@
-🔍 Analyzing codebase...
+🔍 Analyzing codebase in ./smoke/sample_app...
 
 📊 Top 5 methods requiring test coverage:
 
-1. app/models/user.rb:19
+1. app/models/user.rb:21
    Method: can_access_feature?
-   Priority Score: 9.55
-   Coverage: 50.0%
+   Priority Score: 10.3
+   Coverage: 0.0%
    Complexity: 7
    Git Commits: 0
+   Suggested test scenarios:
+     - inactive? || suspended?がtrueの場合
+     - inactive? || suspended?がfalseの場合
+     - admin?がtrueの場合
+     - admin?がfalseの場合
+     - feature_nameが'analytics'の場合
+     - feature_nameが'export'の場合
+     - feature_nameがその他の値の場合
+     - premium?がtrueの場合
+     - premium?がfalseの場合
+     - active?がtrueの場合
+     - active?がfalseの場合
 
-2. app/services/payment_service.rb:6
+2. app/services/payment_service.rb:8
    Method: calculate_fee
-   Priority Score: 7.45
-   Coverage: 56.8%
+   Priority Score: 8.3
+   Coverage: 0.0%
    Complexity: 5
    Git Commits: 0
+   Suggested test scenarios:
+     - premium?がtrueの場合
+     - premium?がfalseの場合
+     - admin?がtrueの場合
+     - admin?がfalseの場合
+     - active?がtrueの場合
+     - active?がfalseの場合
+     - monthly_transaction_count >= 10がtrueの場合
+     - monthly_transaction_count >= 10がfalseの場合
 
-3. app/services/payment_service.rb:26
+3. app/services/payment_service.rb:28
    Method: process_payment
-   Priority Score: 7.45
-   Coverage: 56.8%
+   Priority Score: 8.3
+   Coverage: 0.0%
    Complexity: 5
    Git Commits: 0
+   Suggested test scenarios:
+     - locked?がtrueの場合
+     - locked?がfalseの場合
+     - payment_methodが'credit_card'の場合
+     - payment_methodが'bank_transfer'の場合
+     - payment_methodが'paypal'の場合
+     - payment_methodがその他の値の場合
 
-4. app/models/user.rb:33
+4. app/models/user.rb:35
    Method: calculate_discount
-   Priority Score: 6.55
-   Coverage: 50.0%
+   Priority Score: 7.3
+   Coverage: 0.0%
    Complexity: 4
    Git Commits: 0
+   Suggested test scenarios:
+     - premium?がtrueの場合
+     - premium?がfalseの場合
+     - admin?がtrueの場合
+     - admin?がfalseの場合
+     - created_at < 1.year.agoがtrueの場合
+     - created_at < 1.year.agoがfalseの場合
 
-5. app/controllers/users_controller.rb:4
+5. app/controllers/users_controller.rb:6
    Method: index
    Priority Score: 3.7
    Coverage: 0.0%
    Complexity: 1
    Git Commits: 0
+   Suggested test scenarios:
+     - params[:status].present?がtrueの場合
+     - params[:status].present?がfalseの場合
+     - params[:premium].present?がtrueの場合
+     - params[:premium].present?がfalseの場合
+     - present?がtrueの場合
+     - present?がfalseの場合
 
 📄 Detailed analysis saved to test_sentinel_analysis.json

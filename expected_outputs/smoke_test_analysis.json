@@ -3,66 +3,108 @@
     "file_path": "app/models/user.rb",
     "class_name": "User",
     "method_name": "can_access_feature?",
-    "line_number": 19,
-    "score": 9.55,
+    "line_number": 21,
+    "score": 10.3,
     "details": {
-      "coverage": 0.5,
+      "coverage": 0.0,
       "complexity": 7,
       "git_commits": 0
     },
-    "suggested_scenarios": []
+    "suggested_scenarios": [
+      "inactive? || suspended?がtrueの場合",
+      "inactive? || suspended?がfalseの場合",
+      "admin?がtrueの場合",
+      "admin?がfalseの場合",
+      "feature_nameが'analytics'の場合",
+      "feature_nameが'export'の場合",
+      "feature_nameがその他の値の場合",
+      "premium?がtrueの場合",
+      "premium?がfalseの場合",
+      "active?がtrueの場合",
+      "active?がfalseの場合"
+    ]
   },
   {
     "file_path": "app/services/payment_service.rb",
     "class_name": "PaymentService",
     "method_name": "calculate_fee",
-    "line_number": 6,
-    "score": 7.45,
+    "line_number": 8,
+    "score": 8.3,
     "details": {
-      "coverage": 0.5675675675675675,
+      "coverage": 0.0,
       "complexity": 5,
       "git_commits": 0
     },
-    "suggested_scenarios": []
+    "suggested_scenarios": [
+      "premium?がtrueの場合",
+      "premium?がfalseの場合",
+      "admin?がtrueの場合",
+      "admin?がfalseの場合",
+      "active?がtrueの場合",
+      "active?がfalseの場合",
+      "monthly_transaction_count >= 10がtrueの場合",
+      "monthly_transaction_count >= 10がfalseの場合"
+    ]
   },
   {
     "file_path": "app/services/payment_service.rb",
     "class_name": "PaymentService",
     "method_name": "process_payment",
-    "line_number": 26,
-    "score": 7.45,
+    "line_number": 28,
+    "score": 8.3,
     "details": {
-      "coverage": 0.5675675675675675,
+      "coverage": 0.0,
       "complexity": 5,
       "git_commits": 0
     },
-    "suggested_scenarios": []
+    "suggested_scenarios": [
+      "locked?がtrueの場合",
+      "locked?がfalseの場合",
+      "payment_methodが'credit_card'の場合",
+      "payment_methodが'bank_transfer'の場合",
+      "payment_methodが'paypal'の場合",
+      "payment_methodがその他の値の場合"
+    ]
   },
   {
     "file_path": "app/models/user.rb",
     "class_name": "User",
     "method_name": "calculate_discount",
-    "line_number": 33,
-    "score": 6.55,
+    "line_number": 35,
+    "score": 7.3,
     "details": {
-      "coverage": 0.5,
+      "coverage": 0.0,
       "complexity": 4,
       "git_commits": 0
     },
-    "suggested_scenarios": []
+    "suggested_scenarios": [
+      "premium?がtrueの場合",
+      "premium?がfalseの場合",
+      "admin?がtrueの場合",
+      "admin?がfalseの場合",
+      "created_at < 1.year.agoがtrueの場合",
+      "created_at < 1.year.agoがfalseの場合"
+    ]
   },
   {
     "file_path": "app/controllers/users_controller.rb",
     "class_name": "UsersController",
     "method_name": "index",
-    "line_number": 4,
+    "line_number": 6,
     "score": 3.7,
     "details": {
       "coverage": 0.0,
       "complexity": 1,
       "git_commits": 0
     },
-    "suggested_scenarios": []
+    "suggested_scenarios": [
+      "params[:status].present?がtrueの場合",
+      "params[:status].present?がfalseの場合",
+      "params[:premium].present?がtrueの場合",
+      "params[:premium].present?がfalseの場合",
+      "present?がtrueの場合",
+      "present?がfalseの場合"
+    ]
   },
   {
     "file_path": "app/controllers/users_controller.rb",
@@ -75,7 +117,12 @@
       "complexity": 1,
       "git_commits": 0
     },
-    "suggested_scenarios": []
+    "suggested_scenarios": [
+      "current_user.admin? || current_user == @userがtrueの場合",
+      "current_user.admin? || current_user == @userがfalseの場合",
+      "admin?がtrueの場合",
+      "admin?がfalseの場合"
+    ]
   },
   {
     "file_path": "app/controllers/users_controller.rb",
@@ -88,26 +135,36 @@
       "complexity": 1,
       "git_commits": 0
     },
-    "suggested_scenarios": []
+    "suggested_scenarios": [
+      "saveがtrueの場合",
+      "saveがfalseの場合",
+      "params[:send_welcome_email]がtrueの場合",
+      "params[:send_welcome_email]がfalseの場合"
+    ]
   },
   {
     "file_path": "app/controllers/users_controller.rb",
     "class_name": "UsersController",
     "method_name": "update",
-    "line_number": 36,
+    "line_number": 34,
     "score": 3.7,
     "details": {
       "coverage": 0.0,
       "complexity": 1,
       "git_commits": 0
     },
-    "suggested_scenarios": []
+    "suggested_scenarios": [
+      "update(user_params)がtrueの場合",
+      "update(user_params)がfalseの場合",
+      "user_params[:status] == 'suspended'がtrueの場合",
+      "user_params[:status] == 'suspended'がfalseの場合"
+    ]
   },
   {
     "file_path": "app/controllers/users_controller.rb",
     "class_name": "UsersController",
     "method_name": "set_user",
-    "line_number": 49,
+    "line_number": 45,
     "score": 3.7,
     "details": {
       "coverage": 0.0,
@@ -120,7 +177,7 @@
     "file_path": "app/controllers/users_controller.rb",
     "class_name": "UsersController",
     "method_name": "user_params",
-    "line_number": 53,
+    "line_number": 49,
     "score": 3.7,
     "details": {
       "coverage": 0.0,
@@ -133,7 +190,7 @@
     "file_path": "app/controllers/users_controller.rb",
     "class_name": "UsersController",
     "method_name": "log_suspension_action",
-    "line_number": 57,
+    "line_number": 53,
     "score": 3.7,
     "details": {
       "coverage": 0.0,
@@ -146,7 +203,7 @@
     "file_path": "app/controllers/users_controller.rb",
     "class_name": "UsersController",
     "method_name": "current_user",
-    "line_number": 61,
+    "line_number": 57,
     "score": 3.7,
     "details": {
       "coverage": 0.0,

@@ -39,7 +39,7 @@ module TestSentinel
       output.split("\n").each do |line|
         line = line.strip
         next if line.empty?
-        next unless line.start_with?('app/') || line.start_with?('lib/')
+        next unless line.start_with?('app/', 'lib/')
         next unless line.end_with?('.rb')
 
         results[line] ||= 0

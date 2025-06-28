@@ -74,8 +74,10 @@ module TestSentinel
         condition_text = condition[0].strip
         next if condition_text.empty?
 
-        scenarios << "#{condition_text}がtrueの場合"
-        scenarios << "#{condition_text}がfalseの場合"
+        # Simplify complex conditions for better readability
+        simplified_condition = simplify_condition(condition_text)
+        scenarios << "#{simplified_condition}がtrueの場合"
+        scenarios << "#{simplified_condition}がfalseの場合"
       end
 
       scenarios
@@ -114,6 +116,11 @@ module TestSentinel
       end
 
       scenarios
+    end
+
+    def simplify_condition(condition)
+      # Remove common prefixes that might cause duplication
+      condition.gsub(/@\w+\./, '').gsub(/\s+/, ' ').strip
     end
   end
 end
