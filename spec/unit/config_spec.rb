@@ -37,13 +37,8 @@ RSpec.describe TestSentinel::Config do
       subject { described_class.new }
 
       it 'does not expand default patterns' do
-        expect(subject.directory_weights.count).to eq(4)
-        expect(subject.directory_weights).to include(
-          { 'path' => 'app/models/', 'weight' => 1.5 },
-          { 'path' => 'app/services/', 'weight' => 1.5 },
-          { 'path' => 'app/jobs/', 'weight' => 1.2 },
-          { 'path' => 'app/controllers/', 'weight' => 1.0 }
-        )
+        expect(subject.directory_weights.count).to eq(1)
+        expect(subject.directory_weights).to eq([{ 'path' => '**/*.rb', 'weight' => 1.0 }])
       end
     end
   end

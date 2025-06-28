@@ -1,5 +1,3 @@
-🔍 Analyzing codebase in /Users/teppei/workspace/src/github.com/euglena1215/test-sentinel/smoke/sample_app...
-
 📊 Top 10 methods requiring test coverage:
 
 1. app/models/user.rb:21

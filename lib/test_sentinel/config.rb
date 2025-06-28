@@ -44,17 +44,12 @@ module TestSentinel
 
     def default_directory_weights
       [
-        { 'path' => 'app/models/**/*.rb', 'weight' => 1.5 },
-        { 'path' => 'app/services/**/*.rb', 'weight' => 1.5 },
-        { 'path' => 'app/jobs/**/*.rb', 'weight' => 1.2 },
-        { 'path' => 'app/controllers/**/*.rb', 'weight' => 1.0 }
+        { 'path' => '**/*.rb', 'weight' => 1.0 }
       ]
     end
 
     def default_exclude_patterns
       [
-        'app/channels/**/*',
-        'app/helpers/**/*',
         'config/**/*',
         'db/**/*'
       ]

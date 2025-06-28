@@ -13,7 +13,7 @@ RSpec.describe TestSentinel::ComplexityAnalyzer do
         allow(Dir).to receive(:exist?).with('app/').and_return(true)
         allow(Dir).to receive(:exist?).with('lib/').and_return(true)
         allow(analyzer).to receive(:`).and_return('{"files": []}')
-        allow($CHILD_STATUS).to receive(:exitstatus).and_return(0)
+        allow(analyzer).to receive(:last_exit_status).and_return(0)
       end
 
       it 'runs rubocop on both directories' do
@@ -30,7 +30,7 @@ RSpec.describe TestSentinel::ComplexityAnalyzer do
         allow(Dir).to receive(:exist?).with('app/').and_return(true)
         allow(Dir).to receive(:exist?).with('lib/').and_return(false)
         allow(analyzer).to receive(:`).and_return('{"files": []}')
-        allow($CHILD_STATUS).to receive(:exitstatus).and_return(0)
+        allow(analyzer).to receive(:last_exit_status).and_return(0)
       end
 
       it 'runs rubocop only on app/ directory' do
@@ -47,7 +47,7 @@ RSpec.describe TestSentinel::ComplexityAnalyzer do
         allow(Dir).to receive(:exist?).with('app/').and_return(false)
         allow(Dir).to receive(:exist?).with('lib/').and_return(true)
         allow(analyzer).to receive(:`).and_return('{"files": []}')
-        allow($CHILD_STATUS).to receive(:exitstatus).and_return(0)
+        allow(analyzer).to receive(:last_exit_status).and_return(0)
       end
 
       it 'runs rubocop only on lib/ directory' do
@@ -75,11 +75,11 @@ RSpec.describe TestSentinel::ComplexityAnalyzer do
       before do
         allow(Dir).to receive(:exist?).with('app/').and_return(true)
         allow(Dir).to receive(:exist?).with('lib/').and_return(false)
-        allow($CHILD_STATUS).to receive(:exitstatus).and_return(127, 0)
+        allow(analyzer).to receive(:last_exit_status).and_return(127, 0)
         allow(analyzer).to receive(:`).and_return('', '{"files": []}')
       end
 
-      it 'falls back to running rubocop without bundle exec', skip: 'Cannot stub $CHILD_STATUS directly' do
+      it 'falls back to running rubocop without bundle exec' do
         fallback_command = 'rubocop --format json --only Metrics/CyclomaticComplexity app/'
 
         expect(analyzer).to receive(:`).with('bundle exec rubocop --format json --only Metrics/CyclomaticComplexity app/ 2>/dev/null')
@@ -98,10 +98,10 @@ RSpec.describe TestSentinel::ComplexityAnalyzer do
         allow(Dir).to receive(:exist?).with('app/').and_return(true)
         allow(Dir).to receive(:exist?).with('lib/').and_return(false)
         allow(analyzer).to receive(:`).and_return(rubocop_output)
-        allow($CHILD_STATUS).to receive(:exitstatus).and_return(0)
+        allow(analyzer).to receive(:last_exit_status).and_return(0)
       end
 
-      it 'returns the rubocop output', skip: 'Cannot stub $CHILD_STATUS directly' do
+      it 'returns the rubocop output' do
         result = analyzer.send(:run_rubocop)
         expect(result).to eq(rubocop_output)
       end

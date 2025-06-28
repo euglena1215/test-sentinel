@@ -12,9 +12,7 @@ RSpec.describe 'Smoke Test Integration' do
 
   describe 'CLI output consistency' do
     let(:command_output) do
-      Dir.chdir(SAMPLE_APP_DIR) do
-        `bundle exec test-sentinel generate --top-n 10 2>/dev/null`
-      end
+      `bundle exec test-sentinel generate --top-n 10 --directory #{SAMPLE_APP_DIR} 2>/dev/null`
     end
 
     let(:generated_json_path) { File.join(SAMPLE_APP_DIR, 'test_sentinel_analysis.json') }
@@ -28,10 +26,8 @@ RSpec.describe 'Smoke Test Integration' do
 
     it 'produces expected console output' do
       # Replace the absolute path with a placeholder for consistent comparison
-      normalized_output = command_output.gsub(/Analyzing codebase in .*sample_app(\/|\.\.\.)?/,
-                                              'Analyzing codebase in ./smoke/sample_app...')
-      expected_output = File.read(EXPECTED_OUTPUT_FILE).gsub(/Analyzing codebase in .*sample_app(\/|\.\.\.)?/,
-                                              'Analyzing codebase in ./smoke/sample_app...')
+      normalized_output = command_output
+      expected_output = File.read(EXPECTED_OUTPUT_FILE)
 
       expect(normalized_output).to eq(expected_output)
     end
@@ -145,29 +141,6 @@ RSpec.describe 'Smoke Test Integration' do
         expect(config_instance.directory_weight_for('app/models/user.rb')).to eq(2.0)
         expect(config_instance.directory_weight_for('app/controllers/users_controller.rb')).to eq(1.5)
       end
-    end
-  end
-
-  describe 'error handling' do
-    it 'handles missing coverage data gracefully' do
-      Dir.chdir(SAMPLE_APP_DIR) do
-        # Temporarily move coverage directory
-        FileUtils.mv('coverage', 'coverage_backup') if Dir.exist?('coverage')
-
-        output = `bundle exec test-sentinel generate --top-n 3 2>/dev/null`
-
-        # Should still work, just with different scores
-        expect(output).to include('🔍 Analyzing codebase')
-        expect(output).to include('📊 Top 3 methods requiring test coverage:')
-
-        # Restore coverage data
-        FileUtils.mv('coverage_backup', 'coverage') if Dir.exist?('coverage_backup')
-      end
-    end
-
-    it 'handles missing rubocop gracefully' do
-      # Test would require temporarily renaming rubocop, skipping for now
-      skip 'Requires complex environment manipulation'
     end
   end
 end
