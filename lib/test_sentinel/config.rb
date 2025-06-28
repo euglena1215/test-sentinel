@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'pattern_expander'
+
 module TestSentinel
   class Config
     attr_reader :score_weights, :directory_weights, :exclude_patterns, :git_history_days
@@ -44,7 +46,8 @@ module TestSentinel
 
     def default_directory_weights
       [
-        { 'path' => '**/*.rb', 'weight' => 1.0 }
+        { 'path' => 'app/**/*.rb', 'weight' => 1.0 },
+        { 'path' => 'lib/**/*.rb', 'weight' => 1.0 }
       ]
     end
 
@@ -61,7 +64,7 @@ module TestSentinel
         path = entry['path']
         weight = entry['weight']
         if path.include?('{') && path.include?('}')
-          expanded_paths = expand_brace_patterns(path)
+          expanded_paths = PatternExpander.expand_brace_patterns(path)
           expanded_paths.each do |expanded_path|
             expanded_weights << { 'path' => expanded_path, 'weight' => weight }
           end
@@ -70,25 +73,6 @@ module TestSentinel
         end
       end
       expanded_weights
-    end
-
-    def expand_brace_patterns(pattern)
-      parts = pattern.split('{', 2)
-      prefix = parts[0]
-      suffix_and_rest = parts[1].split('}', 2)
-      options = suffix_and_rest[0].split(',')
-      suffix = suffix_and_rest[1]
-
-      expanded = []
-      options.each do |option|
-        expanded_pattern = "#{prefix}#{option}#{suffix}"
-        if expanded_pattern.include?('{') && expanded_pattern.include?('}')
-          expanded.concat(expand_brace_patterns(expanded_pattern))
-        else
-          expanded << expanded_pattern
-        end
-      end
-      expanded
     end
   end
 end

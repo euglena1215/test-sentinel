@@ -1,27 +1,72 @@
 # frozen_string_literal: true
 
 require 'English'
+require 'json'
+require 'set'
+require_relative 'base_analyzer'
+
 module TestSentinel
-  class ComplexityAnalyzer
+  class ComplexityAnalyzer < BaseAnalyzer
     def self.analyze
       new.analyze
     end
 
     def analyze
-      rubocop_output = run_rubocop
-      parse_rubocop_output(rubocop_output)
+      if use_rubocop_api?
+        analyze_with_api
+      else
+        rubocop_output = run_rubocop
+        parse_rubocop_output(rubocop_output)
+      end
     rescue StandardError => e
       raise Error, "Failed to analyze complexity: #{e.message}"
     end
 
     private
 
-    def run_rubocop
-      # Check for both app/ and lib/ directories
-      directories = []
-      directories << 'app/' if Dir.exist?('app/')
-      directories << 'lib/' if Dir.exist?('lib/')
+    def use_rubocop_api?
+      ENV['TEST_SENTINEL_USE_RUBOCOP_API'] == 'true'
+    end
 
+    def analyze_with_api
+      require 'rubocop'
+
+      directories = get_analysis_directories
+      return {} if directories.empty?
+
+      options = {
+        formatters: [],
+        only: ['Metrics/CyclomaticComplexity']
+      }
+
+      sentinel_config = load_config
+      rubocop_config = RuboCop::ConfigStore.new.for_pwd
+      runner = RuboCop::Runner.new(options, rubocop_config)
+
+      results_collector = ComplexityResultsCollector.new(sentinel_config: sentinel_config)
+      runner.instance_variable_set(:@formatter_set, RuboCop::Formatter::FormatterSet.new([results_collector]))
+
+      runner.run(directories)
+      results_collector.results
+    end
+
+    def get_analysis_directories
+      config = load_config
+      directories = extract_directories_from_config(config)
+      directories.select { |dir| Dir.exist?(dir) }
+    end
+
+    def extract_directories_from_config(config)
+      patterns = config.directory_weights.map { |entry| entry['path'] }
+      directories = PatternExpander.extract_base_directories(patterns)
+
+      # Ensure directories end with '/' and exist
+      directories.map! { |dir| dir.end_with?('/') ? dir : "#{dir}/" }
+      directories.select { |dir| Dir.exist?(dir) }
+    end
+
+    def run_rubocop
+      directories = get_analysis_directories
       return '' if directories.empty?
 
       command = "bundle exec rubocop --format json --only Metrics/CyclomaticComplexity #{directories.join(' ')}"
@@ -66,7 +111,7 @@ module TestSentinel
           relative_path = file_path
         end
 
-        next unless relative_path&.start_with?('app/', 'lib/', 'packs/')
+        next if relative_path.nil? || relative_path.empty?
 
         file_data['offenses'].each do |offense|
           next unless offense['cop_name'] == 'Metrics/CyclomaticComplexity'
@@ -92,6 +137,69 @@ module TestSentinel
       # Extract complexity value and method name from RuboCop message
       # Example: "Cyclomatic complexity for `calculate_fee` is too high. [12/6]"
       match = message.match(%r{Cyclomatic complexity for `([^`]+)` is too high\. \[(\d+)/\d+\]})
+      return nil unless match
+
+      {
+        method_name: match[1],
+        complexity: match[2].to_i
+      }
+    end
+  end
+
+  # Custom formatter for RuboCop API mode
+  class ComplexityResultsCollector
+    attr_reader :results
+
+    def initialize(output = nil, options = {}, sentinel_config: nil)
+      @results = {}
+      @sentinel_config = sentinel_config
+    end
+
+    def file_finished(file, offenses)
+      complexity_offenses = offenses.select { |offense| offense.cop_name == 'Metrics/CyclomaticComplexity' }
+      return if complexity_offenses.empty?
+
+      relative_path = normalize_file_path(file)
+      return if relative_path.nil? || relative_path.empty?
+
+      @results[relative_path] ||= []
+
+      complexity_offenses.each do |offense|
+        method_info = extract_method_info_from_offense(offense)
+        next unless method_info
+
+        @results[relative_path] << {
+          method_name: method_info[:method_name],
+          line_number: offense.line,
+          complexity: method_info[:complexity]
+        }
+      end
+    end
+
+    private
+
+    def normalize_file_path(file_path)
+      if @sentinel_config
+        # Use BaseAnalyzer's logic for normalization
+        base_analyzer = BaseAnalyzer.new
+        base_analyzer.send(:normalize_file_path, file_path, @sentinel_config)
+      else
+        # Fallback to original logic for backward compatibility
+        if file_path.include?('/app/')
+          relative_path = file_path.split('/app/').last
+          relative_path = "app/#{relative_path}" if relative_path
+        elsif file_path.include?('/lib/')
+          relative_path = file_path.split('/lib/').last
+          relative_path = "lib/#{relative_path}" if relative_path
+        else
+          relative_path = file_path
+        end
+        relative_path
+      end
+    end
+
+    def extract_method_info_from_offense(offense)
+      match = offense.message.match(%r{Cyclomatic complexity for `([^`]+)` is too high\. \[(\d+)/\d+\]})
       return nil unless match
 
       {

@@ -1,0 +1,23 @@
+score_weights:
+  coverage: 1.5
+  complexity: 1.0
+  git_history: 0.8
+  directory: 1.2
+
+directory_weights:
+  - path: 'lib/calculator/**/*.rb'
+    weight: 2.0    # Core calculator logic is critical
+  - path: 'lib/calculator/operations/**/*.rb'
+    weight: 2.5    # Mathematical operations are most critical
+  - path: 'lib/calculator/formatters/**/*.rb'
+    weight: 1.5    # Output formatting is important
+  - path: 'lib/**/*.rb'
+    weight: 1.0    # General library files
+  - path: 'bin/**/*'
+    weight: 1.3    # CLI interface is important
+
+exclude:
+  - 'spec/**/*'
+  - 'Gemfile*'
+
+git_history_days: 90

@@ -1,0 +1,122 @@
+[
+  {
+    "file_path": "app/models/user.rb",
+    "class_name": "User",
+    "method_name": "can_access_feature?",
+    "line_number": 21,
+    "score": 10.15,
+    "details": {
+      "coverage": 0.5,
+      "complexity": 7,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "app/models/user.rb",
+    "class_name": "User",
+    "method_name": "calculate_discount",
+    "line_number": 35,
+    "score": 7.15,
+    "details": {
+      "coverage": 0.5,
+      "complexity": 4,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "app/controllers/users_controller.rb",
+    "class_name": "UsersController",
+    "method_name": "index",
+    "line_number": 6,
+    "score": 4.3,
+    "details": {
+      "coverage": 0.0,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "app/controllers/users_controller.rb",
+    "class_name": "UsersController",
+    "method_name": "show",
+    "line_number": 16,
+    "score": 4.3,
+    "details": {
+      "coverage": 0.0,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "app/controllers/users_controller.rb",
+    "class_name": "UsersController",
+    "method_name": "create",
+    "line_number": 23,
+    "score": 4.3,
+    "details": {
+      "coverage": 0.0,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "app/controllers/users_controller.rb",
+    "class_name": "UsersController",
+    "method_name": "update",
+    "line_number": 34,
+    "score": 4.3,
+    "details": {
+      "coverage": 0.0,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "app/controllers/users_controller.rb",
+    "class_name": "UsersController",
+    "method_name": "set_user",
+    "line_number": 45,
+    "score": 4.3,
+    "details": {
+      "coverage": 0.0,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "app/controllers/users_controller.rb",
+    "class_name": "UsersController",
+    "method_name": "user_params",
+    "line_number": 49,
+    "score": 4.3,
+    "details": {
+      "coverage": 0.0,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "app/controllers/users_controller.rb",
+    "class_name": "UsersController",
+    "method_name": "log_suspension_action",
+    "line_number": 53,
+    "score": 4.3,
+    "details": {
+      "coverage": 0.0,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "app/controllers/users_controller.rb",
+    "class_name": "UsersController",
+    "method_name": "current_user",
+    "line_number": 57,
+    "score": 4.3,
+    "details": {
+      "coverage": 0.0,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  }
+]

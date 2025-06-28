@@ -1,28 +1,103 @@
-#!/bin/bash
+#!/usr/bin/env ruby
+# frozen_string_literal: true
 
-# This script updates the expected outputs for the smoke tests.
-# It runs the test-sentinel generate command in the sample app
-# and copies the generated output to the expected_outputs directory.
+require 'fileutils'
 
-set -e
+# Script to update smoke test expected outputs
+class SmokeTestUpdater
+  def initialize
+    @root_dir = File.expand_path('..', __dir__)
+    @smoke_dir = File.join(@root_dir, 'smoke')
+    @expected_outputs_dir = File.join(@root_dir, 'expected_outputs')
+  end
 
-PROJECT_ROOT=$(dirname "$(dirname "$(readlink -f "$0")")")
-SAMPLE_APP_DIR="${PROJECT_ROOT}/smoke/sample_app"
-EXPECTED_OUTPUTS_DIR="${PROJECT_ROOT}/expected_outputs"
+  def run
+    puts "🔄 Updating smoke test expected outputs..."
+    
+    smoke_projects.each do |project|
+      puts "\n📁 Processing #{project[:name]}..."
+      update_project_outputs(project)
+    end
+    
+    puts "\n✅ All smoke test expected outputs have been updated!"
+  end
 
-echo "Updating smoke test outputs..."
+  private
 
-# Navigate to the sample app directory
-cd "${SAMPLE_APP_DIR}"
+  def smoke_projects
+    projects = []
+    Dir.entries(@smoke_dir).each do |entry|
+      project_path = File.join(@smoke_dir, entry)
+      expected_path = File.join(@expected_outputs_dir, entry)
 
-# Run test-sentinel generate and redirect output to expected_outputs/smoke_test_output.txt
-# Suppress stderr from test-sentinel itself, but allow script errors to show
-bundle exec test-sentinel generate --top-n 10 > "${EXPECTED_OUTPUTS_DIR}/smoke_test_output.txt" 2>/dev/null
+      # Only include directories that have a Gemfile
+      next unless File.directory?(project_path) &&
+                  !entry.start_with?('.') &&
+                  File.exist?(File.join(project_path, 'Gemfile'))
 
-# Copy the generated JSON analysis file
-cp test_sentinel_analysis.json "${EXPECTED_OUTPUTS_DIR}/smoke_test_analysis.json"
+      projects << {
+        name: entry,
+        dir: project_path,
+        expected_path: expected_path,
+        is_rails: File.exist?(File.join(project_path, 'config', 'application.rb'))
+      }
+    end
+    projects
+  end
 
-echo "Smoke test outputs updated successfully!"
+  def update_project_outputs(project)
+    # Ensure expected outputs directory exists
+    FileUtils.mkdir_p(project[:expected_path])
+    
+    # Generate coverage data if needed
+    generate_coverage_data(project)
+    
+    # Generate outputs for each format
+    %w[human json csv table].each do |format|
+      puts "  📊 Generating #{format} format..."
+      
+      command_output = if project[:is_rails]
+        # For Rails projects, run from within the project directory
+        `cd #{project[:dir]} && bundle exec test-sentinel generate --format #{format} --top-n 10 2>/dev/null`
+      else
+        # For non-Rails projects, run from project root with --directory option
+        `bundle exec test-sentinel generate --format #{format} --directory #{project[:dir]} --top-n 10 2>/dev/null`
+      end
+      
+      if $?.success?
+        file_extension = format == 'json' ? 'json' : (format == 'csv' ? 'csv' : 'txt')
+        output_file = File.join(project[:expected_path], "output_#{format}.#{file_extension}")
+        File.write(output_file, command_output)
+        puts "    ✓ Saved to #{File.basename(output_file)}"
+      else
+        puts "    ❌ Failed to generate #{format} format for #{project[:name]}"
+      end
+    end
+    
+    # Clean up generated files
+    cleanup_generated_files(project)
+  end
 
-# Navigate back to the project root (optional, but good practice)
-cd "${PROJECT_ROOT}"
+  def generate_coverage_data(project)
+    return if project[:is_rails] # Rails apps should already have coverage
+    
+    puts "  🧪 Generating coverage data..."
+    Dir.chdir(project[:dir]) do
+      if File.exist?('spec/spec_helper.rb')
+        `bundle exec rspec --require spec_helper 2>/dev/null || true`
+      elsif File.exist?('test/test_helper.rb')
+        `bundle exec rake test 2>/dev/null || true`
+      end
+    end
+  end
+
+  def cleanup_generated_files(project)
+    generated_json_path = File.join(project[:dir], 'test_sentinel_analysis.json')
+    File.delete(generated_json_path) if File.exist?(generated_json_path)
+  end
+end
+
+# Run the updater
+if __FILE__ == $0
+  SmokeTestUpdater.new.run
+end

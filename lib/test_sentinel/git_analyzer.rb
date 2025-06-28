@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 require 'date'
+require_relative 'base_analyzer'
 
 module TestSentinel
-  class GitAnalyzer
+  class GitAnalyzer < BaseAnalyzer
     def self.analyze(days = 90)
       new(days).analyze
     end
@@ -15,8 +16,9 @@ module TestSentinel
     def analyze
       return {} unless git_repository?
 
+      config = load_config
       git_log_output = run_git_log
-      parse_git_log(git_log_output)
+      parse_git_log(git_log_output, config)
     rescue StandardError => e
       raise Error, "Failed to analyze git history: #{e.message}"
     end
@@ -33,14 +35,17 @@ module TestSentinel
       `#{command} 2>/dev/null`
     end
 
-    def parse_git_log(output)
+    def parse_git_log(output, config = nil)
+      # For backward compatibility with tests
+      config = load_config if config.nil?
+
       results = {}
+      target_patterns = get_target_patterns(config)
 
       output.split("\n").each do |line|
         line = line.strip
         next if line.empty?
-        next unless line.start_with?('app/', 'lib/')
-        next unless line.end_with?('.rb')
+        next unless should_include_file?(line, target_patterns)
 
         results[line] ||= 0
         results[line] += 1

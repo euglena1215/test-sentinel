@@ -1,0 +1,302 @@
+[
+  {
+    "file_path": "app/models/user.rb",
+    "class_name": "User",
+    "method_name": "can_access_feature?",
+    "line_number": 21,
+    "score": 10.15,
+    "details": {
+      "coverage": 0.5,
+      "complexity": 7,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "app/models/user.rb",
+    "class_name": "User",
+    "method_name": "calculate_discount",
+    "line_number": 35,
+    "score": 7.15,
+    "details": {
+      "coverage": 0.5,
+      "complexity": 4,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "app/controllers/users_controller.rb",
+    "class_name": "UsersController",
+    "method_name": "index",
+    "line_number": 6,
+    "score": 4.3,
+    "details": {
+      "coverage": 0.0,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "app/controllers/users_controller.rb",
+    "class_name": "UsersController",
+    "method_name": "show",
+    "line_number": 16,
+    "score": 4.3,
+    "details": {
+      "coverage": 0.0,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "app/controllers/users_controller.rb",
+    "class_name": "UsersController",
+    "method_name": "create",
+    "line_number": 23,
+    "score": 4.3,
+    "details": {
+      "coverage": 0.0,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "app/controllers/users_controller.rb",
+    "class_name": "UsersController",
+    "method_name": "update",
+    "line_number": 34,
+    "score": 4.3,
+    "details": {
+      "coverage": 0.0,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "app/controllers/users_controller.rb",
+    "class_name": "UsersController",
+    "method_name": "set_user",
+    "line_number": 45,
+    "score": 4.3,
+    "details": {
+      "coverage": 0.0,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "app/controllers/users_controller.rb",
+    "class_name": "UsersController",
+    "method_name": "user_params",
+    "line_number": 49,
+    "score": 4.3,
+    "details": {
+      "coverage": 0.0,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "app/controllers/users_controller.rb",
+    "class_name": "UsersController",
+    "method_name": "log_suspension_action",
+    "line_number": 53,
+    "score": 4.3,
+    "details": {
+      "coverage": 0.0,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "app/controllers/users_controller.rb",
+    "class_name": "UsersController",
+    "method_name": "current_user",
+    "line_number": 57,
+    "score": 4.3,
+    "details": {
+      "coverage": 0.0,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "packs/users/app/models/users/user_profile.rb",
+    "class_name": "UserProfile",
+    "method_name": "display_name",
+    "line_number": 5,
+    "score": 3.7,
+    "details": {
+      "coverage": 0.0,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "app/services/payment_service.rb",
+    "class_name": "PaymentService",
+    "method_name": "process_paypal_payment",
+    "line_number": 66,
+    "score": 3.7,
+    "details": {
+      "coverage": 0.0,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "app/services/payment_service.rb",
+    "class_name": "PaymentService",
+    "method_name": "process_bank_transfer",
+    "line_number": 62,
+    "score": 3.7,
+    "details": {
+      "coverage": 0.0,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "app/services/payment_service.rb",
+    "class_name": "PaymentService",
+    "method_name": "process_credit_card_payment",
+    "line_number": 57,
+    "score": 3.7,
+    "details": {
+      "coverage": 0.0,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "app/services/payment_service.rb",
+    "class_name": "PaymentService",
+    "method_name": "monthly_transaction_count",
+    "line_number": 48,
+    "score": 3.7,
+    "details": {
+      "coverage": 0.0,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "app/services/payment_service.rb",
+    "class_name": "PaymentService",
+    "method_name": "process_payment",
+    "line_number": 28,
+    "score": 3.7,
+    "details": {
+      "coverage": 0.0,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "app/services/payment_service.rb",
+    "class_name": "PaymentService",
+    "method_name": "calculate_fee",
+    "line_number": 8,
+    "score": 3.7,
+    "details": {
+      "coverage": 0.0,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "app/services/payment_service.rb",
+    "class_name": "PaymentService",
+    "method_name": "initialize",
+    "line_number": 4,
+    "score": 3.7,
+    "details": {
+      "coverage": 0.0,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "/Users/teppei/workspace/src/github.com/euglena1215/test-sentinel/smoke/sample_app/app/services/payment_service.rb",
+    "class_name": "PaymentService",
+    "method_name": "initialize",
+    "line_number": 4,
+    "score": 2.8,
+    "details": {
+      "coverage": 0.6,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "/Users/teppei/workspace/src/github.com/euglena1215/test-sentinel/smoke/sample_app/app/services/payment_service.rb",
+    "class_name": "PaymentService",
+    "method_name": "calculate_fee",
+    "line_number": 8,
+    "score": 2.8,
+    "details": {
+      "coverage": 0.6,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "/Users/teppei/workspace/src/github.com/euglena1215/test-sentinel/smoke/sample_app/app/services/payment_service.rb",
+    "class_name": "PaymentService",
+    "method_name": "process_payment",
+    "line_number": 28,
+    "score": 2.8,
+    "details": {
+      "coverage": 0.6,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "/Users/teppei/workspace/src/github.com/euglena1215/test-sentinel/smoke/sample_app/app/services/payment_service.rb",
+    "class_name": "PaymentService",
+    "method_name": "monthly_transaction_count",
+    "line_number": 48,
+    "score": 2.8,
+    "details": {
+      "coverage": 0.6,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "/Users/teppei/workspace/src/github.com/euglena1215/test-sentinel/smoke/sample_app/app/services/payment_service.rb",
+    "class_name": "PaymentService",
+    "method_name": "process_credit_card_payment",
+    "line_number": 57,
+    "score": 2.8,
+    "details": {
+      "coverage": 0.6,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "/Users/teppei/workspace/src/github.com/euglena1215/test-sentinel/smoke/sample_app/app/services/payment_service.rb",
+    "class_name": "PaymentService",
+    "method_name": "process_bank_transfer",
+    "line_number": 62,
+    "score": 2.8,
+    "details": {
+      "coverage": 0.6,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "/Users/teppei/workspace/src/github.com/euglena1215/test-sentinel/smoke/sample_app/app/services/payment_service.rb",
+    "class_name": "PaymentService",
+    "method_name": "process_paypal_payment",
+    "line_number": 66,
+    "score": 2.8,
+    "details": {
+      "coverage": 0.6,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  }
+]

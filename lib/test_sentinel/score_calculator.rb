@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'scenario_generator'
 
 module TestSentinel
   class ScoreCalculator
@@ -42,15 +41,12 @@ module TestSentinel
       complexity_methods = extract_methods_from_file(file_path) if complexity_methods.empty?
 
       complexity_methods.each do |method_data|
-        suggested_scenarios = generate_scenarios_for_method(file_path, method_data)
-
         method_info = {
           file_path: file_path,
           method_name: method_data[:method_name],
           line_number: method_data[:line_number],
           score: calculate_method_score(file_path, method_data, coverage_data, git_data),
-          details: calculate_method_details(file_path, method_data, coverage_data, git_data),
-          suggested_scenarios: suggested_scenarios
+          details: calculate_method_details(file_path, method_data, coverage_data, git_data)
         }
 
         methods << method_info
@@ -110,21 +106,5 @@ module TestSentinel
       }
     end
 
-    def generate_scenarios_for_method(file_path, method_data)
-      # Convert relative file path to absolute path for ScenarioGenerator
-      absolute_path = File.exist?(file_path) ? file_path : File.join(Dir.pwd, file_path)
-
-      return [] unless File.exist?(absolute_path)
-
-      ScenarioGenerator.generate_for_method(
-        absolute_path,
-        method_data[:method_name],
-        method_data[:line_number]
-      )
-    rescue StandardError => e
-      # Log error but don't fail the entire analysis
-      warn "Warning: Failed to generate scenarios for #{file_path}:#{method_data[:line_number]} - #{e.message}"
-      []
-    end
   end
 end

@@ -1,0 +1,72 @@
+📊 Top 10 methods requiring test coverage:
+
+1. lib/calculator/parser.rb:63
+   Method: convert_to_postfix
+   Priority Score: 19.54
+   Coverage: 90.9%
+   Complexity: 17
+   Git Commits: 0
+
+2. lib/calculator/parser.rb:26
+   Method: validate_tokens
+   Priority Score: 11.54
+   Coverage: 90.9%
+   Complexity: 9
+   Git Commits: 0
+
+3. bin/calculator:32
+   Method: process_input
+   Priority Score: 11.06
+   Coverage: 0.0%
+   Complexity: 8
+   Git Commits: 0
+
+4. lib/calculator/operations/scientific.rb:8
+   Method: sin
+   Priority Score: 4.23
+   Coverage: 44.6%
+   Complexity: 1
+   Git Commits: 0
+
+5. lib/calculator/operations/scientific.rb:18
+   Method: cos
+   Priority Score: 4.23
+   Coverage: 44.6%
+   Complexity: 1
+   Git Commits: 0
+
+6. lib/calculator/operations/scientific.rb:28
+   Method: tan
+   Priority Score: 4.23
+   Coverage: 44.6%
+   Complexity: 1
+   Git Commits: 0
+
+7. lib/calculator/operations/scientific.rb:44
+   Method: log
+   Priority Score: 4.23
+   Coverage: 44.6%
+   Complexity: 1
+   Git Commits: 0
+
+8. lib/calculator/operations/scientific.rb:65
+   Method: sqrt
+   Priority Score: 4.23
+   Coverage: 44.6%
+   Complexity: 1
+   Git Commits: 0
+
+9. lib/calculator/operations/scientific.rb:75
+   Method: exp
+   Priority Score: 4.23
+   Coverage: 44.6%
+   Complexity: 1
+   Git Commits: 0
+
+10. lib/calculator/operations/scientific.rb:87
+   Method: asin
+   Priority Score: 4.23
+   Coverage: 44.6%
+   Complexity: 1
+   Git Commits: 0
+

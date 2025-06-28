@@ -1,0 +1,69 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require_relative '../lib/calculator'
+
+class CalculatorCLI
+  def initialize
+    @formatter = Calculator::Formatters::Console.new
+    @evaluator = Calculator::Evaluator.new
+    @running = true
+  end
+
+  def run
+    puts "Calculator CLI v#{Calculator.version}"
+    puts "Type 'help' for commands, 'exit' to quit"
+    puts
+
+    while @running
+      print "> "
+      input = gets&.chomp
+      
+      break if input.nil?
+      
+      process_input(input)
+    end
+
+    puts "Goodbye!"
+  end
+
+  private
+
+  def process_input(input)
+    input = input.strip.downcase
+
+    case input
+    when 'exit', 'quit', 'q'
+      @running = false
+    when 'help', 'h'
+      puts @formatter.format_help
+    when 'history'
+      puts @formatter.format_history(@evaluator.history)
+    when 'clear', 'cls'
+      system('clear') || system('cls')
+    when ''
+      # Do nothing for empty input
+    else
+      calculate_expression(input)
+    end
+  rescue Interrupt
+    puts "\nGoodbye!"
+    @running = false
+  end
+
+  def calculate_expression(expression)
+    result = Calculator.calculate(expression)
+    puts @formatter.format(result)
+    
+    @evaluator.add_to_history(expression, result)
+  rescue Calculator::Error => e
+    puts @formatter.format_error(e)
+  rescue StandardError => e
+    puts @formatter.format_error(Calculator::Error.new("Unexpected error: #{e.message}"))
+  end
+end
+
+# Run the CLI if this file is executed directly
+if __FILE__ == $PROGRAM_NAME
+  CalculatorCLI.new.run
+end

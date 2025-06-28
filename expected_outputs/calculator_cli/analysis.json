@@ -1,0 +1,566 @@
+[
+  {
+    "file_path": "lib/calculator/parser.rb",
+    "class_name": "Parser",
+    "method_name": "convert_to_postfix",
+    "line_number": 63,
+    "score": 19.54,
+    "details": {
+      "coverage": 0.9090909090909091,
+      "complexity": 17,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/parser.rb",
+    "class_name": "Parser",
+    "method_name": "validate_tokens",
+    "line_number": 26,
+    "score": 11.54,
+    "details": {
+      "coverage": 0.9090909090909091,
+      "complexity": 9,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "bin/calculator",
+    "class_name": "Calculator",
+    "method_name": "process_input",
+    "line_number": 32,
+    "score": 11.06,
+    "details": {
+      "coverage": 0.0,
+      "complexity": 8,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/operations/scientific.rb",
+    "class_name": "Scientific",
+    "method_name": "sin",
+    "line_number": 8,
+    "score": 4.23,
+    "details": {
+      "coverage": 0.44594594594594594,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/operations/scientific.rb",
+    "class_name": "Scientific",
+    "method_name": "cos",
+    "line_number": 18,
+    "score": 4.23,
+    "details": {
+      "coverage": 0.44594594594594594,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/operations/scientific.rb",
+    "class_name": "Scientific",
+    "method_name": "tan",
+    "line_number": 28,
+    "score": 4.23,
+    "details": {
+      "coverage": 0.44594594594594594,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/operations/scientific.rb",
+    "class_name": "Scientific",
+    "method_name": "log",
+    "line_number": 44,
+    "score": 4.23,
+    "details": {
+      "coverage": 0.44594594594594594,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/operations/scientific.rb",
+    "class_name": "Scientific",
+    "method_name": "sqrt",
+    "line_number": 65,
+    "score": 4.23,
+    "details": {
+      "coverage": 0.44594594594594594,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/operations/scientific.rb",
+    "class_name": "Scientific",
+    "method_name": "exp",
+    "line_number": 75,
+    "score": 4.23,
+    "details": {
+      "coverage": 0.44594594594594594,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/operations/scientific.rb",
+    "class_name": "Scientific",
+    "method_name": "asin",
+    "line_number": 87,
+    "score": 4.23,
+    "details": {
+      "coverage": 0.44594594594594594,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/operations/scientific.rb",
+    "class_name": "Scientific",
+    "method_name": "acos",
+    "line_number": 97,
+    "score": 4.23,
+    "details": {
+      "coverage": 0.44594594594594594,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/operations/scientific.rb",
+    "class_name": "Scientific",
+    "method_name": "atan",
+    "line_number": 107,
+    "score": 4.23,
+    "details": {
+      "coverage": 0.44594594594594594,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/operations/scientific.rb",
+    "class_name": "Scientific",
+    "method_name": "pi",
+    "line_number": 112,
+    "score": 4.23,
+    "details": {
+      "coverage": 0.44594594594594594,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/operations/scientific.rb",
+    "class_name": "Scientific",
+    "method_name": "e",
+    "line_number": 116,
+    "score": 4.23,
+    "details": {
+      "coverage": 0.44594594594594594,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/operations/scientific.rb",
+    "class_name": "Scientific",
+    "method_name": "deg_to_rad",
+    "line_number": 120,
+    "score": 4.23,
+    "details": {
+      "coverage": 0.44594594594594594,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/operations/scientific.rb",
+    "class_name": "Scientific",
+    "method_name": "rad_to_deg",
+    "line_number": 125,
+    "score": 4.23,
+    "details": {
+      "coverage": 0.44594594594594594,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/operations/scientific.rb",
+    "class_name": "Scientific",
+    "method_name": "validate_number",
+    "line_number": 132,
+    "score": 4.23,
+    "details": {
+      "coverage": 0.44594594594594594,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/formatters/console.rb",
+    "class_name": "Console",
+    "method_name": "initialize",
+    "line_number": 6,
+    "score": 4.06,
+    "details": {
+      "coverage": 0.5625,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/formatters/console.rb",
+    "class_name": "Console",
+    "method_name": "format",
+    "line_number": 10,
+    "score": 4.06,
+    "details": {
+      "coverage": 0.5625,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/formatters/console.rb",
+    "class_name": "Console",
+    "method_name": "format_error",
+    "line_number": 25,
+    "score": 4.06,
+    "details": {
+      "coverage": 0.5625,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/formatters/console.rb",
+    "class_name": "Console",
+    "method_name": "format_history",
+    "line_number": 29,
+    "score": 4.06,
+    "details": {
+      "coverage": 0.5625,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/formatters/console.rb",
+    "class_name": "Console",
+    "method_name": "format_help",
+    "line_number": 43,
+    "score": 4.06,
+    "details": {
+      "coverage": 0.5625,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/formatters/console.rb",
+    "class_name": "Console",
+    "method_name": "format_float",
+    "line_number": 78,
+    "score": 4.06,
+    "details": {
+      "coverage": 0.5625,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/formatters/console.rb",
+    "class_name": "Console",
+    "method_name": "significant_digits",
+    "line_number": 87,
+    "score": 4.06,
+    "details": {
+      "coverage": 0.5625,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/evaluator.rb",
+    "class_name": "Evaluator",
+    "method_name": "initialize",
+    "line_number": 8,
+    "score": 3.75,
+    "details": {
+      "coverage": 0.7666666666666667,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/evaluator.rb",
+    "class_name": "Evaluator",
+    "method_name": "evaluate",
+    "line_number": 13,
+    "score": 3.75,
+    "details": {
+      "coverage": 0.7666666666666667,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/evaluator.rb",
+    "class_name": "Evaluator",
+    "method_name": "evaluate_binary_operation",
+    "line_number": 42,
+    "score": 3.75,
+    "details": {
+      "coverage": 0.7666666666666667,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/evaluator.rb",
+    "class_name": "Evaluator",
+    "method_name": "evaluate_unary_operation",
+    "line_number": 66,
+    "score": 3.75,
+    "details": {
+      "coverage": 0.7666666666666667,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/evaluator.rb",
+    "class_name": "Evaluator",
+    "method_name": "validate_result",
+    "line_number": 89,
+    "score": 3.75,
+    "details": {
+      "coverage": 0.7666666666666667,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/evaluator.rb",
+    "class_name": "Evaluator",
+    "method_name": "memory_store",
+    "line_number": 97,
+    "score": 3.75,
+    "details": {
+      "coverage": 0.7666666666666667,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/evaluator.rb",
+    "class_name": "Evaluator",
+    "method_name": "memory_recall",
+    "line_number": 101,
+    "score": 3.75,
+    "details": {
+      "coverage": 0.7666666666666667,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/evaluator.rb",
+    "class_name": "Evaluator",
+    "method_name": "memory_clear",
+    "line_number": 105,
+    "score": 3.75,
+    "details": {
+      "coverage": 0.7666666666666667,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/evaluator.rb",
+    "class_name": "Evaluator",
+    "method_name": "history",
+    "line_number": 109,
+    "score": 3.75,
+    "details": {
+      "coverage": 0.7666666666666667,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/evaluator.rb",
+    "class_name": "Evaluator",
+    "method_name": "add_to_history",
+    "line_number": 113,
+    "score": 3.75,
+    "details": {
+      "coverage": 0.7666666666666667,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/operations/basic.rb",
+    "class_name": "Basic",
+    "method_name": "add",
+    "line_number": 6,
+    "score": 3.71,
+    "details": {
+      "coverage": 0.7966101694915254,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/operations/basic.rb",
+    "class_name": "Basic",
+    "method_name": "subtract",
+    "line_number": 11,
+    "score": 3.71,
+    "details": {
+      "coverage": 0.7966101694915254,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/operations/basic.rb",
+    "class_name": "Basic",
+    "method_name": "multiply",
+    "line_number": 16,
+    "score": 3.71,
+    "details": {
+      "coverage": 0.7966101694915254,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/operations/basic.rb",
+    "class_name": "Basic",
+    "method_name": "divide",
+    "line_number": 21,
+    "score": 3.71,
+    "details": {
+      "coverage": 0.7966101694915254,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/operations/basic.rb",
+    "class_name": "Basic",
+    "method_name": "power",
+    "line_number": 37,
+    "score": 3.71,
+    "details": {
+      "coverage": 0.7966101694915254,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/operations/basic.rb",
+    "class_name": "Basic",
+    "method_name": "modulo",
+    "line_number": 58,
+    "score": 3.71,
+    "details": {
+      "coverage": 0.7966101694915254,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/operations/basic.rb",
+    "class_name": "Basic",
+    "method_name": "absolute",
+    "line_number": 68,
+    "score": 3.71,
+    "details": {
+      "coverage": 0.7966101694915254,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/operations/basic.rb",
+    "class_name": "Basic",
+    "method_name": "validate_number",
+    "line_number": 101,
+    "score": 3.71,
+    "details": {
+      "coverage": 0.7966101694915254,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/operations/basic.rb",
+    "class_name": "Basic",
+    "method_name": "validate_numbers",
+    "line_number": 97,
+    "score": 3.71,
+    "details": {
+      "coverage": 0.7966101694915254,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/operations/basic.rb",
+    "class_name": "Basic",
+    "method_name": "factorial",
+    "line_number": 78,
+    "score": 3.71,
+    "details": {
+      "coverage": 0.7966101694915254,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/operations/basic.rb",
+    "class_name": "Basic",
+    "method_name": "negate",
+    "line_number": 73,
+    "score": 3.71,
+    "details": {
+      "coverage": 0.7966101694915254,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator.rb",
+    "class_name": "Calculator",
+    "method_name": "self",
+    "line_number": 12,
+    "score": 2.2,
+    "details": {
+      "coverage": 1.0,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator.rb",
+    "class_name": "Calculator",
+    "method_name": "self",
+    "line_number": 26,
+    "score": 2.2,
+    "details": {
+      "coverage": 1.0,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  }
+]

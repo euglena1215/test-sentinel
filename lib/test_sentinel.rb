@@ -6,8 +6,8 @@ require_relative 'test_sentinel/coverage_analyzer'
 require_relative 'test_sentinel/complexity_analyzer'
 require_relative 'test_sentinel/git_analyzer'
 require_relative 'test_sentinel/score_calculator'
-require_relative 'test_sentinel/scenario_generator'
 require_relative 'test_sentinel/config'
+require_relative 'test_sentinel/config_installer'
 
 module TestSentinel
   class Error < StandardError; end

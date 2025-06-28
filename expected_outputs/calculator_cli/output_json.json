@@ -1,0 +1,122 @@
+[
+  {
+    "file_path": "lib/calculator/parser.rb",
+    "class_name": "Parser",
+    "method_name": "convert_to_postfix",
+    "line_number": 63,
+    "score": 19.54,
+    "details": {
+      "coverage": 0.9090909090909091,
+      "complexity": 17,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/parser.rb",
+    "class_name": "Parser",
+    "method_name": "validate_tokens",
+    "line_number": 26,
+    "score": 11.54,
+    "details": {
+      "coverage": 0.9090909090909091,
+      "complexity": 9,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "bin/calculator",
+    "class_name": "Calculator",
+    "method_name": "process_input",
+    "line_number": 32,
+    "score": 11.06,
+    "details": {
+      "coverage": 0.0,
+      "complexity": 8,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/operations/scientific.rb",
+    "class_name": "Scientific",
+    "method_name": "sin",
+    "line_number": 8,
+    "score": 4.23,
+    "details": {
+      "coverage": 0.44594594594594594,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/operations/scientific.rb",
+    "class_name": "Scientific",
+    "method_name": "cos",
+    "line_number": 18,
+    "score": 4.23,
+    "details": {
+      "coverage": 0.44594594594594594,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/operations/scientific.rb",
+    "class_name": "Scientific",
+    "method_name": "tan",
+    "line_number": 28,
+    "score": 4.23,
+    "details": {
+      "coverage": 0.44594594594594594,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/operations/scientific.rb",
+    "class_name": "Scientific",
+    "method_name": "log",
+    "line_number": 44,
+    "score": 4.23,
+    "details": {
+      "coverage": 0.44594594594594594,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/operations/scientific.rb",
+    "class_name": "Scientific",
+    "method_name": "sqrt",
+    "line_number": 65,
+    "score": 4.23,
+    "details": {
+      "coverage": 0.44594594594594594,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/operations/scientific.rb",
+    "class_name": "Scientific",
+    "method_name": "exp",
+    "line_number": 75,
+    "score": 4.23,
+    "details": {
+      "coverage": 0.44594594594594594,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "lib/calculator/operations/scientific.rb",
+    "class_name": "Scientific",
+    "method_name": "asin",
+    "line_number": 87,
+    "score": 4.23,
+    "details": {
+      "coverage": 0.44594594594594594,
+      "complexity": 1,
+      "git_commits": 0
+    }
+  }
+]
