@@ -1,4 +1,4 @@
-require:
+plugins:
   - rubocop-performance
   - rubocop-rspec
 
@@ -6,6 +6,9 @@ AllCops:
   NewCops: enable
   Exclude:
     - 'smoke/sample_app/**/*'
+
+Rake:
+  Enabled: false
 
 Metrics/BlockLength:
   Exclude:
