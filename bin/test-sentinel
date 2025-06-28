@@ -1,0 +1,147 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'optparse'
+require 'pathname'
+
+# Add lib directory to load path
+lib_path = Pathname.new(__FILE__).dirname.parent.join('lib')
+$LOAD_PATH.unshift(lib_path) unless $LOAD_PATH.include?(lib_path.to_s)
+
+require 'test_sentinel'
+
+class CLI
+  def initialize(argv)
+    @argv = argv
+    @options = {
+      top_n: 3,
+      config: './sentinel.yml',
+      directory: Dir.pwd
+    }
+  end
+
+  def run
+    parse_options
+
+    case @command
+    when 'generate'
+      generate_analysis
+    else
+      show_help
+    end
+  end
+
+  private
+
+  def parse_options
+    parser = OptionParser.new do |opts|
+      opts.banner = 'Usage: test-sentinel [command] [options]'
+      opts.separator ''
+      opts.separator 'Commands:'
+      opts.separator '  generate    Analyze codebase and generate test recommendations'
+      opts.separator ''
+      opts.separator 'Options:'
+
+      opts.on('--top-n N', Integer, 'Number of top priority methods to analyze (default: 3)') do |n|
+        @options[:top_n] = n
+      end
+
+      opts.on('--config PATH', String, 'Path to configuration file (default: ./sentinel.yml)') do |path|
+        @options[:config] = path
+      end
+
+      opts.on('--directory DIR', String, 'Directory to analyze (default: current directory)') do |dir|
+        @options[:directory] = dir
+      end
+
+      opts.on('-h', '--help', 'Show this help message') do
+        puts opts
+        exit
+      end
+    end
+
+    parser.parse!(@argv)
+    @command = @argv.shift
+  end
+
+  def generate_analysis
+    puts "🔍 Analyzing codebase in #{@options[:directory]}..."
+
+    begin
+      # Change to target directory for analysis
+      original_dir = Dir.pwd
+      Dir.chdir(@options[:directory])
+
+      results = TestSentinel.analyze(@options[:config])
+
+      if results.empty?
+        puts '✅ No methods found that need additional testing.'
+        return
+      end
+
+      top_results = results.take(@options[:top_n])
+
+      puts "\n📊 Top #{@options[:top_n]} methods requiring test coverage:\n\n"
+
+      top_results.each_with_index do |method, index|
+        puts "#{index + 1}. #{method[:file_path]}:#{method[:line_number]}"
+        puts "   Method: #{method[:method_name]}"
+        puts "   Priority Score: #{method[:score]}"
+        puts "   Coverage: #{(method[:details][:coverage] * 100).round(1)}%"
+        puts "   Complexity: #{method[:details][:complexity]}"
+        puts "   Git Commits: #{method[:details][:git_commits]}"
+
+        if method[:suggested_scenarios] && !method[:suggested_scenarios].empty?
+          puts '   Suggested test scenarios:'
+          method[:suggested_scenarios].each do |scenario|
+            puts "     - #{scenario}"
+          end
+        end
+
+        puts ''
+      end
+
+      output_json(results) if results.length.positive?
+    rescue TestSentinel::Error => e
+      puts "❌ Error: #{e.message}"
+      exit 1
+    rescue StandardError => e
+      puts "❌ Unexpected error: #{e.message}"
+      exit 1
+    ensure
+      Dir.chdir(original_dir) if original_dir
+    end
+  end
+
+  def output_json(results)
+    json_output = results.map do |method|
+      {
+        file_path: method[:file_path],
+        class_name: extract_class_name(method[:file_path]),
+        method_name: method[:method_name],
+        line_number: method[:line_number],
+        score: method[:score],
+        details: method[:details],
+        suggested_scenarios: method[:suggested_scenarios] || []
+      }
+    end
+
+    File.write('test_sentinel_analysis.json', JSON.pretty_generate(json_output))
+    puts '📄 Detailed analysis saved to test_sentinel_analysis.json'
+  end
+
+  def extract_class_name(file_path)
+    # Simple heuristic to extract class name from file path
+    File.basename(file_path, '.rb').split('_').map(&:capitalize).join
+  end
+
+  def show_help
+    puts 'test-sentinel - AI-powered test coverage analysis tool'
+    puts ''
+    puts 'Usage: test-sentinel generate [options]'
+    puts ''
+    puts "Run 'test-sentinel generate --help' for more information."
+  end
+end
+
+CLI.new(ARGV).run

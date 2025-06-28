@@ -1,0 +1,5 @@
+Metrics/CyclomaticComplexity:
+  Max: 3
+
+AllCops:
+  NewCops: enable

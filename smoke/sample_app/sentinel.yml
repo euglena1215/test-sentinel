@@ -1,0 +1,32 @@
+# Test Sentinel Configuration
+# Weights for priority score calculation
+score_weights:
+  coverage: 1.5      # Higher weight for low coverage
+  complexity: 1.0    # Standard weight for complexity
+  git_history: 0.8   # Lower weight for git activity
+  directory: 1.2     # Weight for directory importance
+
+# Directory-specific importance weights
+directory_weights:
+  - path: "app/models/"
+    weight: 1.5      # Models are critical
+  - path: "app/services/"
+    weight: 1.5      # Services contain business logic
+  - path: "app/controllers/"
+    weight: 1.0      # Standard weight for controllers
+  - path: "app/jobs/"
+    weight: 1.2      # Background jobs are important
+  - path: "app/lib/"
+    weight: 1.3      # Custom libraries need testing
+
+# Files to exclude from analysis
+exclude:
+  - "app/channels/**/*"
+  - "app/helpers/**/*"
+  - "config/**/*"
+  - "db/**/*"
+  - "spec/**/*"
+  - "test/**/*"
+
+# Number of days to analyze git history
+git_history_days: 90

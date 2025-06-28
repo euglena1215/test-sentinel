@@ -1,0 +1,40 @@
+🔍 Analyzing codebase...
+
+📊 Top 5 methods requiring test coverage:
+
+1. app/models/user.rb:19
+   Method: can_access_feature?
+   Priority Score: 9.55
+   Coverage: 50.0%
+   Complexity: 7
+   Git Commits: 0
+
+2. app/services/payment_service.rb:6
+   Method: calculate_fee
+   Priority Score: 7.45
+   Coverage: 56.8%
+   Complexity: 5
+   Git Commits: 0
+
+3. app/services/payment_service.rb:26
+   Method: process_payment
+   Priority Score: 7.45
+   Coverage: 56.8%
+   Complexity: 5
+   Git Commits: 0
+
+4. app/models/user.rb:33
+   Method: calculate_discount
+   Priority Score: 6.55
+   Coverage: 50.0%
+   Complexity: 4
+   Git Commits: 0
+
+5. app/controllers/users_controller.rb:4
+   Method: index
+   Priority Score: 3.7
+   Coverage: 0.0%
+   Complexity: 1
+   Git Commits: 0
+
+📄 Detailed analysis saved to test_sentinel_analysis.json

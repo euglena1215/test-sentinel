@@ -1,0 +1,134 @@
+# frozen_string_literal: true
+
+require 'spec_helper'
+require 'test_sentinel/coverage_analyzer'
+
+RSpec.describe TestSentinel::CoverageAnalyzer do
+  describe '#parse_coverage_data' do
+    subject(:analyzer) { described_class.new }
+
+    context 'with valid coverage data for app/ files' do
+      let(:coverage_data) do
+        {
+          '/full/path/to/app/models/user.rb' => {
+            'lines' => [1, 1, 0, nil, 1, 0, 0]
+          },
+          '/full/path/to/app/services/payment.rb' => [1, 0, 1, nil, 0]
+        }
+      end
+
+      it 'calculates coverage rates correctly' do
+        result = analyzer.send(:parse_coverage_data, coverage_data)
+
+        expect(result).to have_key('app/models/user.rb')
+        expect(result['app/models/user.rb'][:coverage_rate]).to eq(0.5) # 3/6 lines covered (excluding nils: 1,1,0,1,0,0)
+        expect(result['app/models/user.rb'][:covered_lines]).to eq(3)
+        expect(result['app/models/user.rb'][:total_lines]).to eq(6)
+      end
+
+      it 'handles array format coverage data' do
+        result = analyzer.send(:parse_coverage_data, coverage_data)
+
+        expect(result).to have_key('app/services/payment.rb')
+        expect(result['app/services/payment.rb'][:coverage_rate]).to eq(0.5) # 2/4 lines covered
+        expect(result['app/services/payment.rb'][:covered_lines]).to eq(2)
+        expect(result['app/services/payment.rb'][:total_lines]).to eq(4)
+      end
+
+      it 'stores line coverage data' do
+        result = analyzer.send(:parse_coverage_data, coverage_data)
+
+        expect(result['app/models/user.rb'][:line_coverage]).to eq([1, 1, 0, nil, 1, 0, 0])
+        expect(result['app/services/payment.rb'][:line_coverage]).to eq([1, 0, 1, nil, 0])
+      end
+    end
+
+    context 'with valid coverage data for lib/ files' do
+      let(:coverage_data) do
+        {
+          '/full/path/to/lib/test_sentinel/analyzer.rb' => {
+            'lines' => [1, 1, 0, 0, nil, 1]
+          }
+        }
+      end
+
+      it 'processes lib/ files correctly' do
+        result = analyzer.send(:parse_coverage_data, coverage_data)
+
+        expect(result).to have_key('lib/test_sentinel/analyzer.rb')
+        expect(result['lib/test_sentinel/analyzer.rb'][:coverage_rate]).to eq(0.6) # 3/5 lines covered
+        expect(result['lib/test_sentinel/analyzer.rb'][:covered_lines]).to eq(3)
+        expect(result['lib/test_sentinel/analyzer.rb'][:total_lines]).to eq(5)
+      end
+    end
+
+    context 'with mixed app/ and lib/ files' do
+      let(:coverage_data) do
+        {
+          '/full/path/to/app/models/user.rb' => [1, 0, 1],
+          '/full/path/to/lib/analyzer.rb' => [1, 1, 0],
+          '/full/path/to/config/application.rb' => [1, 1, 1] # should be ignored
+        }
+      end
+
+      it 'only processes app/ and lib/ files' do
+        result = analyzer.send(:parse_coverage_data, coverage_data)
+
+        expect(result.keys).to contain_exactly('app/models/user.rb', 'lib/analyzer.rb')
+        expect(result).not_to have_key('config/application.rb')
+      end
+    end
+
+    context 'with edge cases' do
+      let(:coverage_data) do
+        {
+          '/full/path/to/app/models/empty.rb' => [],
+          '/full/path/to/app/models/nil_coverage.rb' => nil,
+          '/full/path/to/app/models/only_nils.rb' => [nil, nil, nil],
+          '/full/path/to/app/models/valid.rb' => [1, 0, 1]
+        }
+      end
+
+      it 'handles empty coverage data' do
+        result = analyzer.send(:parse_coverage_data, coverage_data)
+
+        expect(result).not_to have_key('app/models/empty.rb')
+        expect(result).not_to have_key('app/models/nil_coverage.rb')
+        expect(result).not_to have_key('app/models/only_nils.rb')
+        expect(result).to have_key('app/models/valid.rb')
+      end
+    end
+
+    context 'with zero coverage' do
+      let(:coverage_data) do
+        {
+          '/full/path/to/app/models/uncovered.rb' => [0, 0, 0, nil, 0]
+        }
+      end
+
+      it 'calculates zero coverage correctly' do
+        result = analyzer.send(:parse_coverage_data, coverage_data)
+
+        expect(result['app/models/uncovered.rb'][:coverage_rate]).to eq(0.0)
+        expect(result['app/models/uncovered.rb'][:covered_lines]).to eq(0)
+        expect(result['app/models/uncovered.rb'][:total_lines]).to eq(4)
+      end
+    end
+
+    context 'with full coverage' do
+      let(:coverage_data) do
+        {
+          '/full/path/to/app/models/covered.rb' => [1, 2, 1, nil, 5]
+        }
+      end
+
+      it 'calculates full coverage correctly' do
+        result = analyzer.send(:parse_coverage_data, coverage_data)
+
+        expect(result['app/models/covered.rb'][:coverage_rate]).to eq(1.0)
+        expect(result['app/models/covered.rb'][:covered_lines]).to eq(4)
+        expect(result['app/models/covered.rb'][:total_lines]).to eq(4)
+      end
+    end
+  end
+end

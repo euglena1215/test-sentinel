@@ -1,0 +1,158 @@
+[
+  {
+    "file_path": "app/models/user.rb",
+    "class_name": "User",
+    "method_name": "can_access_feature?",
+    "line_number": 19,
+    "score": 9.55,
+    "details": {
+      "coverage": 0.5,
+      "complexity": 7,
+      "git_commits": 0
+    },
+    "suggested_scenarios": []
+  },
+  {
+    "file_path": "app/services/payment_service.rb",
+    "class_name": "PaymentService",
+    "method_name": "calculate_fee",
+    "line_number": 6,
+    "score": 7.45,
+    "details": {
+      "coverage": 0.5675675675675675,
+      "complexity": 5,
+      "git_commits": 0
+    },
+    "suggested_scenarios": []
+  },
+  {
+    "file_path": "app/services/payment_service.rb",
+    "class_name": "PaymentService",
+    "method_name": "process_payment",
+    "line_number": 26,
+    "score": 7.45,
+    "details": {
+      "coverage": 0.5675675675675675,
+      "complexity": 5,
+      "git_commits": 0
+    },
+    "suggested_scenarios": []
+  },
+  {
+    "file_path": "app/models/user.rb",
+    "class_name": "User",
+    "method_name": "calculate_discount",
+    "line_number": 33,
+    "score": 6.55,
+    "details": {
+      "coverage": 0.5,
+      "complexity": 4,
+      "git_commits": 0
+    },
+    "suggested_scenarios": []
+  },
+  {
+    "file_path": "app/controllers/users_controller.rb",
+    "class_name": "UsersController",
+    "method_name": "index",
+    "line_number": 4,
+    "score": 3.7,
+    "details": {
+      "coverage": 0.0,
+      "complexity": 1,
+      "git_commits": 0
+    },
+    "suggested_scenarios": []
+  },
+  {
+    "file_path": "app/controllers/users_controller.rb",
+    "class_name": "UsersController",
+    "method_name": "show",
+    "line_number": 16,
+    "score": 3.7,
+    "details": {
+      "coverage": 0.0,
+      "complexity": 1,
+      "git_commits": 0
+    },
+    "suggested_scenarios": []
+  },
+  {
+    "file_path": "app/controllers/users_controller.rb",
+    "class_name": "UsersController",
+    "method_name": "create",
+    "line_number": 23,
+    "score": 3.7,
+    "details": {
+      "coverage": 0.0,
+      "complexity": 1,
+      "git_commits": 0
+    },
+    "suggested_scenarios": []
+  },
+  {
+    "file_path": "app/controllers/users_controller.rb",
+    "class_name": "UsersController",
+    "method_name": "update",
+    "line_number": 36,
+    "score": 3.7,
+    "details": {
+      "coverage": 0.0,
+      "complexity": 1,
+      "git_commits": 0
+    },
+    "suggested_scenarios": []
+  },
+  {
+    "file_path": "app/controllers/users_controller.rb",
+    "class_name": "UsersController",
+    "method_name": "set_user",
+    "line_number": 49,
+    "score": 3.7,
+    "details": {
+      "coverage": 0.0,
+      "complexity": 1,
+      "git_commits": 0
+    },
+    "suggested_scenarios": []
+  },
+  {
+    "file_path": "app/controllers/users_controller.rb",
+    "class_name": "UsersController",
+    "method_name": "user_params",
+    "line_number": 53,
+    "score": 3.7,
+    "details": {
+      "coverage": 0.0,
+      "complexity": 1,
+      "git_commits": 0
+    },
+    "suggested_scenarios": []
+  },
+  {
+    "file_path": "app/controllers/users_controller.rb",
+    "class_name": "UsersController",
+    "method_name": "log_suspension_action",
+    "line_number": 57,
+    "score": 3.7,
+    "details": {
+      "coverage": 0.0,
+      "complexity": 1,
+      "git_commits": 0
+    },
+    "suggested_scenarios": []
+  },
+  {
+    "file_path": "app/controllers/users_controller.rb",
+    "class_name": "UsersController",
+    "method_name": "current_user",
+    "line_number": 61,
+    "score": 3.7,
+    "details": {
+      "coverage": 0.0,
+      "complexity": 1,
+      "git_commits": 0
+    },
+    "suggested_scenarios": []
+  }
+]
