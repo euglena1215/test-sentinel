@@ -6,9 +6,7 @@ AllCops:
   NewCops: enable
   Exclude:
     - 'smoke/sample_app/**/*'
-
-Rake:
-  Enabled: false
+    - 'Rakefile'
 
 Metrics/BlockLength:
   Exclude:
