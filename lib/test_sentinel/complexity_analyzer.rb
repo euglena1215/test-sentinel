@@ -27,13 +27,17 @@ module TestSentinel
       command = "bundle exec rubocop --format json --only Metrics/CyclomaticComplexity #{directories.join(' ')}"
       result = `#{command} 2>/dev/null`
 
-      if $CHILD_STATUS.exitstatus == 127
+      if last_exit_status == 127
         # If bundler is not available, try without bundle exec
         command = "rubocop --format json --only Metrics/CyclomaticComplexity #{directories.join(' ')}"
         result = `#{command} 2>/dev/null`
       end
 
       result
+    end
+
+    def last_exit_status
+      $CHILD_STATUS.exitstatus
     end
 
     def parse_rubocop_output(output)
@@ -62,7 +66,7 @@ module TestSentinel
           relative_path = file_path
         end
 
-        next unless relative_path&.start_with?('app/', 'lib/')
+        next unless relative_path&.start_with?('app/', 'lib/', 'packs/')
 
         file_data['offenses'].each do |offense|
           next unless offense['cop_name'] == 'Metrics/CyclomaticComplexity'

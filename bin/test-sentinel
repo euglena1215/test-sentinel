@@ -65,52 +65,47 @@ class CLI
   end
 
   def generate_analysis
-    puts "🔍 Analyzing codebase in #{@options[:directory]}..."
+    # Change to target directory for analysis
+    Dir.chdir(@options[:directory])
 
-    begin
-      # Change to target directory for analysis
-      original_dir = Dir.pwd
-      Dir.chdir(@options[:directory])
+    results = TestSentinel.analyze(@options[:config])
 
-      results = TestSentinel.analyze(@options[:config])
-
-      if results.empty?
-        puts '✅ No methods found that need additional testing.'
-        return
-      end
-
-      top_results = results.take(@options[:top_n])
-
-      puts "\n📊 Top #{@options[:top_n]} methods requiring test coverage:\n\n"
-
-      top_results.each_with_index do |method, index|
-        puts "#{index + 1}. #{method[:file_path]}:#{method[:line_number]}"
-        puts "   Method: #{method[:method_name]}"
-        puts "   Priority Score: #{method[:score]}"
-        puts "   Coverage: #{(method[:details][:coverage] * 100).round(1)}%"
-        puts "   Complexity: #{method[:details][:complexity]}"
-        puts "   Git Commits: #{method[:details][:git_commits]}"
-
-        if method[:suggested_scenarios] && !method[:suggested_scenarios].empty?
-          puts '   Suggested test scenarios:'
-          method[:suggested_scenarios].each do |scenario|
-            puts "     - #{scenario}"
-          end
-        end
-
-        puts ''
-      end
-
-      output_json(results) if results.length.positive?
-    rescue TestSentinel::Error => e
-      puts "❌ Error: #{e.message}"
-      exit 1
-    rescue StandardError => e
-      puts "❌ Unexpected error: #{e.message}"
-      exit 1
-    ensure
-      Dir.chdir(original_dir) if original_dir
+    if results.empty?
+      puts '✅ No methods found that need additional testing.'
+      return
     end
+
+    top_results = results.take(@options[:top_n])
+
+    puts "📊 Top #{@options[:top_n]} methods requiring test coverage:\n\n"
+
+    top_results.each_with_index do |method, index|
+      puts "#{index + 1}. #{method[:file_path]}:#{method[:line_number]}"
+      puts "   Method: #{method[:method_name]}"
+      puts "   Priority Score: #{method[:score]}"
+      puts "   Coverage: #{(method[:details][:coverage] * 100).round(1)}%"
+      puts "   Complexity: #{method[:details][:complexity]}"
+      puts "   Git Commits: #{method[:details][:git_commits]}"
+
+      if method[:suggested_scenarios] && !method[:suggested_scenarios].empty?
+        puts '   Suggested test scenarios:'
+        method[:suggested_scenarios].each do |scenario|
+          puts "     - #{scenario}"
+        end
+      end
+
+      puts ''
+    end
+
+    output_json(results) if results.length.positive?
+  rescue TestSentinel::Error => e
+    puts "❌ Error: #{e.message}"
+    exit 1
+  rescue StandardError => e
+    puts "❌ Unexpected error: #{e.message}"
+    exit 1
+  ensure
+    Dir.chdir(original_dir) if original_dir
   end
 
   def output_json(results)

@@ -6,7 +6,7 @@ module TestSentinel
 
     def initialize(data = {})
       @score_weights = data['score_weights'] || default_score_weights
-      @directory_weights = data['directory_weights'] || default_directory_weights
+      @directory_weights = expand_directory_weights(data['directory_weights'] || default_directory_weights)
       @exclude_patterns = data['exclude'] || default_exclude_patterns
       @git_history_days = data['git_history_days'] || 90
     end
@@ -22,7 +22,7 @@ module TestSentinel
 
     def directory_weight_for(file_path)
       @directory_weights.each do |entry|
-        return entry['weight'] if file_path.start_with?(entry['path'])
+        return entry['weight'] if File.fnmatch(entry['path'], file_path, File::FNM_PATHNAME)
       end
       1.0
     end
@@ -44,20 +44,51 @@ module TestSentinel
 
     def default_directory_weights
       [
-        { 'path' => 'app/models/', 'weight' => 1.5 },
-        { 'path' => 'app/services/', 'weight' => 1.5 },
-        { 'path' => 'app/jobs/', 'weight' => 1.2 },
-        { 'path' => 'app/controllers/', 'weight' => 1.0 }
+        { 'path' => '**/*.rb', 'weight' => 1.0 }
       ]
     end
 
     def default_exclude_patterns
       [
-        'app/channels/**/*',
-        'app/helpers/**/*',
         'config/**/*',
         'db/**/*'
       ]
+    end
+
+    def expand_directory_weights(weights)
+      expanded_weights = []
+      weights.each do |entry|
+        path = entry['path']
+        weight = entry['weight']
+        if path.include?('{') && path.include?('}')
+          expanded_paths = expand_brace_patterns(path)
+          expanded_paths.each do |expanded_path|
+            expanded_weights << { 'path' => expanded_path, 'weight' => weight }
+          end
+        else
+          expanded_weights << entry
+        end
+      end
+      expanded_weights
+    end
+
+    def expand_brace_patterns(pattern)
+      parts = pattern.split('{', 2)
+      prefix = parts[0]
+      suffix_and_rest = parts[1].split('}', 2)
+      options = suffix_and_rest[0].split(',')
+      suffix = suffix_and_rest[1]
+
+      expanded = []
+      options.each do |option|
+        expanded_pattern = "#{prefix}#{option}#{suffix}"
+        if expanded_pattern.include?('{') && expanded_pattern.include?('}')
+          expanded.concat(expand_brace_patterns(expanded_pattern))
+        else
+          expanded << expanded_pattern
+        end
+      end
+      expanded
     end
   end
 end
