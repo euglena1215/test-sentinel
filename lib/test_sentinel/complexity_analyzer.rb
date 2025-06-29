@@ -4,6 +4,7 @@ require 'English'
 require 'json'
 require 'set'
 require_relative 'config_helper'
+require_relative 'logger'
 
 module TestSentinel
   class ComplexityAnalyzer
@@ -12,13 +13,18 @@ module TestSentinel
     end
 
     def analyze
+      Logger.log("Starting complexity analysis")
+      
       if use_rubocop_api?
+        Logger.log("Using RuboCop API for complexity analysis")
         analyze_with_api
       else
+        Logger.log("Running RuboCop command for complexity analysis")
         rubocop_output = run_rubocop
         parse_rubocop_output(rubocop_output)
       end
     rescue StandardError => e
+      Logger.log_error('Complexity analysis', e)
       raise Error, "Failed to analyze complexity: #{e.message}"
     end
 

@@ -1,0 +1,18 @@
+score_weights:
+  coverage: 2.0
+  complexity: 1.0
+  git_history: 1.0
+  directory: 1.0
+
+directory_weights:
+  - path: 'lib/**/*.rb'
+    weight: 1.0
+  - path: 'bin/**/*'
+    weight: 1.3
+
+exclude:
+  - 'spec/**/*'
+  - 'test/**/*'
+  - 'Gemfile*'
+
+git_history_days: 90

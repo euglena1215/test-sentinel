@@ -2,6 +2,7 @@
 
 require 'date'
 require_relative 'config_helper'
+require_relative 'logger'
 
 module TestSentinel
   class GitAnalyzer
@@ -14,12 +15,23 @@ module TestSentinel
     end
 
     def analyze
-      return {} unless git_repository?
+      Logger.log("Checking if current directory is a git repository")
+      
+      unless git_repository?
+        Logger.log("Not a git repository, skipping git analysis")
+        return {}
+      end
 
+      Logger.log("Git repository detected, analyzing #{@days} days of history")
       config = ConfigHelper.load_config
       git_log_output = run_git_log
-      parse_git_log(git_log_output, config)
+      Logger.log("Git log retrieved, parsing file changes")
+      
+      result = parse_git_log(git_log_output, config)
+      Logger.log("Found git history for #{result.size} files")
+      result
     rescue StandardError => e
+      Logger.log_error('Git analysis', e)
       raise Error, "Failed to analyze git history: #{e.message}"
     end
 

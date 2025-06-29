@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'config_helper'
+require_relative 'logger'
 
 module TestSentinel
   class CoverageAnalyzer
@@ -11,15 +12,26 @@ module TestSentinel
     end
 
     def analyze
-      return {} unless File.exist?(RESULTSET_PATH)
+      Logger.log("Looking for coverage data at #{RESULTSET_PATH}")
+      
+      unless File.exist?(RESULTSET_PATH)
+        Logger.log("Coverage file not found: #{RESULTSET_PATH}")
+        return {}
+      end
 
+      Logger.log("Reading coverage data from #{RESULTSET_PATH}")
       data = JSON.parse(File.read(RESULTSET_PATH))
       resultset = data.values.first
 
-      return {} unless resultset && resultset['coverage']
+      unless resultset && resultset['coverage']
+        Logger.log("No coverage data found in resultset")
+        return {}
+      end
 
+      Logger.log("Found coverage data for #{resultset['coverage'].size} files")
       parse_coverage_data(resultset['coverage'])
     rescue JSON::ParserError => e
+      Logger.log_error('Coverage analysis', e)
       raise Error, "Failed to parse coverage data: #{e.message}"
     end
 

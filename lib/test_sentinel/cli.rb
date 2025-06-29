@@ -12,7 +12,8 @@ module TestSentinel
         top_n: 3,
         config: './sentinel.yml',
         directory: Dir.pwd,
-        format: 'human'
+        format: 'human',
+        verbose: false
       }
     end
 
@@ -61,6 +62,10 @@ module TestSentinel
           @options[:format] = format
         end
 
+        opts.on('-v', '--verbose', 'Enable verbose logging') do
+          @options[:verbose] = true
+        end
+
         opts.on('-h', '--help', 'Show this help message') do
           puts opts
           exit
@@ -78,7 +83,7 @@ module TestSentinel
         # Change to target directory for analysis
         Dir.chdir(@options[:directory])
 
-        results = TestSentinel.analyze(@options[:config])
+        results = TestSentinel.analyze(@options[:config], verbose: @options[:verbose])
 
         if results.empty?
           case @options[:format]
