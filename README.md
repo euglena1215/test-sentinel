@@ -117,32 +117,6 @@ git_history_days: 90
 - **RuboCop**: For code complexity analysis  
 - **Git**: For file change history
 
-### Performance Options
-
-Test Sentinel supports two execution modes for RuboCop analysis:
-
-#### Command-line Mode (Default)
-Uses external RuboCop command execution:
-```bash
-bundle exec test-sentinel generate
-```
-
-#### API Mode
-Uses RuboCop's Ruby API directly for better performance:
-```bash
-export TEST_SENTINEL_USE_RUBOCOP_API=true
-bundle exec test-sentinel generate
-```
-
-**API Mode Benefits:**
-- Reduced execution overhead
-- Better error handling
-- No external command dependencies
-
-**When to use API mode:**
-- Large codebases where performance is critical
-- CI/CD environments with strict time constraints
-- When debugging RuboCop integration issues
 
 ## 🏗️ How It Works
 

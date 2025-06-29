@@ -9,14 +9,14 @@ module TestSentinel
         return unless verbose
 
         timestamp = Time.now.strftime('%H:%M:%S')
-        puts "[#{timestamp}] #{message}"
+        $stderr.puts "[#{timestamp}] #{message}"
       end
 
       def log_step(step_name)
         return unless verbose
 
         timestamp = Time.now.strftime('%H:%M:%S')
-        puts "[#{timestamp}] 🔍 Starting #{step_name}..."
+        $stderr.puts "[#{timestamp}] 🔍 Starting #{step_name}..."
       end
 
       def log_result(step_name, result_count = nil, duration = nil)
@@ -26,21 +26,21 @@ module TestSentinel
         message = "[#{timestamp}] ✅ #{step_name} completed"
         message += " (#{result_count} items)" if result_count
         message += " in #{duration.round(2)}s" if duration
-        puts message
+        $stderr.puts message
       end
 
       def log_error(step_name, error)
         return unless verbose
 
         timestamp = Time.now.strftime('%H:%M:%S')
-        puts "[#{timestamp}] ❌ #{step_name} failed: #{error.message}"
+        $stderr.puts "[#{timestamp}] ❌ #{step_name} failed: #{error.message}"
       end
 
       def log_skip(step_name, reason)
         return unless verbose
 
         timestamp = Time.now.strftime('%H:%M:%S')
-        puts "[#{timestamp}] ⏭️  Skipping #{step_name}: #{reason}"
+        $stderr.puts "[#{timestamp}] ⏭️  Skipping #{step_name}: #{reason}"
       end
     end
   end
