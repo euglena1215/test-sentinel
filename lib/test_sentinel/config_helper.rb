@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'pathname'
 require_relative 'pattern_expander'
 require_relative 'config'
 
@@ -68,41 +69,31 @@ module TestSentinel
         end
       end
 
-      # Normalizes a file path to a relative path based on configured base directories.
+      # Normalizes a file path to a relative path from the current working directory.
       #
-      # This method takes an absolute or mixed file path and converts it to a normalized
-      # relative path starting from configured base directories (e.g., 'app/', 'lib/').
-      # This ensures consistent file path representation across different execution contexts.
+      # This method takes an absolute file path and converts it to a relative path
+      # from the current working directory. This preserves the full directory structure
+      # including any intermediate directories like 'packs/users/'.
       #
       # @param file_path [String] The file path to normalize (can be absolute or relative)
-      # @return [String] Normalized relative path starting from base directory
+      # @return [String] Relative path from current working directory
       # @example
-      #   ConfigHelper.normalize_file_path("/full/path/to/project/app/models/user.rb")
+      #   ConfigHelper.normalize_file_path("/full/path/to/project/packs/users/app/models/user.rb")
+      #   # => "packs/users/app/models/user.rb"
+      #   ConfigHelper.normalize_file_path("app/models/user.rb")
       #   # => "app/models/user.rb"
-      #   ConfigHelper.normalize_file_path("lib/my_gem/version.rb")
-      #   # => "lib/my_gem/version.rb"
       def normalize_file_path(file_path)
-        # Load configuration and try to find a matching base directory
-        config = load_config
-        base_directories = extract_base_directories_from_config(config)
+        # If already a relative path, return as-is
+        return file_path unless Pathname.new(file_path).absolute?
 
-        # Check each base directory to see if the file path contains it
-        base_directories.each do |base_dir|
-          dir_pattern = "/#{base_dir}"
-          next unless file_path.include?(dir_pattern)
-
-          relative_path = file_path.split(dir_pattern).last
-          relative_path = "#{base_dir}#{relative_path}" if relative_path
-          return relative_path
+        # Convert absolute path to relative path from current working directory
+        current_dir = Dir.pwd
+        if file_path.start_with?(current_dir)
+          relative_path = file_path[(current_dir.length + 1)..-1]
+          return relative_path || file_path
         end
 
-        # If no base directory matches, check if it's already a relative path
-        base_directories.each do |base_dir|
-          return file_path if file_path.start_with?("#{base_dir}/")
-        end
-
-        # If it doesn't match any configured patterns, return the file path as-is
-        # This allows for flexible configuration beyond traditional Rails structure
+        # If it doesn't start with current directory, return as-is
         file_path
       end
 
@@ -126,21 +117,6 @@ module TestSentinel
       end
 
       private
-
-      def extract_base_directories_from_config(config)
-        # Extract patterns from config
-        patterns = config.directory_weights.map { |entry| entry['path'] }
-
-        # Use PatternExpander to extract base directories
-        directories = PatternExpander.extract_base_directories(patterns)
-
-        # Remove trailing slashes and sort by length (longer paths first for better matching)
-        directories.map { |dir| dir.chomp('/') }
-                   .reject(&:empty?)
-                   .uniq
-                   .sort_by(&:length)
-                   .reverse
-      end
     end
   end
 end

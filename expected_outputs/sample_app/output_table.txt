@@ -2,7 +2,7 @@
 | File                 | Method              | Line | Score | Coverage | Complexity | Commits  |
 +----------------------+---------------------+------+-------+----------+------------+----------+
 | app/models/user.rb   | can_access_feature? |   21 | 10.15 |    50.0% |          7 |        0 |
-| app/models/users/us… | display_name        |    5 |  8.90 |     0.0% |          5 |        0 |
+| packs/users/app/mod… | display_name        |    5 |  7.70 |     0.0% |          5 |        0 |
 | app/models/user.rb   | calculate_discount  |   35 |  7.15 |    50.0% |          4 |        0 |
 | app/services/paymen… | calculate_fee       |    8 |  6.80 |    60.0% |          5 |        0 |
 | app/services/paymen… | process_payment     |   28 |  6.80 |    60.0% |          5 |        0 |

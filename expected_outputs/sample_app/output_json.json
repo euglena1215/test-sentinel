@@ -12,11 +12,11 @@
     }
   },
   {
-    "file_path": "app/models/users/user_profile.rb",
+    "file_path": "packs/users/app/models/users/user_profile.rb",
     "class_name": "UserProfile",
     "method_name": "display_name",
     "line_number": 5,
-    "score": 8.9,
+    "score": 7.7,
     "details": {
       "coverage": 0.0,
       "complexity": 5,

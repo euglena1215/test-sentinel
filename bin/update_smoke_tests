@@ -83,11 +83,12 @@ class SmokeTestUpdater
   end
 
   def generate_coverage_data(project)
-    return if project[:is_rails] # Rails apps should already have coverage
-
     puts '  🧪 Generating coverage data...'
     Dir.chdir(project[:dir]) do
-      if File.exist?('spec/spec_helper.rb')
+      if project[:is_rails]
+        # For Rails projects, run RSpec to generate coverage
+        `bundle exec rspec 2>/dev/null || true`
+      elsif File.exist?('spec/spec_helper.rb')
         `bundle exec rspec --require spec_helper 2>/dev/null || true`
       elsif File.exist?('test/test_helper.rb')
         `bundle exec rake test 2>/dev/null || true`

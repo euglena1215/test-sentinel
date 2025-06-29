@@ -7,9 +7,9 @@
    Complexity: 7
    Git Commits: 0
 
-2. app/models/users/user_profile.rb:5
+2. packs/users/app/models/users/user_profile.rb:5
    Method: display_name
-   Priority Score: 8.9
+   Priority Score: 7.7
    Coverage: 0.0%
    Complexity: 5
    Git Commits: 0
