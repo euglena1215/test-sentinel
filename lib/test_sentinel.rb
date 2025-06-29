@@ -8,9 +8,12 @@ require_relative 'test_sentinel/git_analyzer'
 require_relative 'test_sentinel/score_calculator'
 require_relative 'test_sentinel/config'
 require_relative 'test_sentinel/config_installer'
+require_relative 'test_sentinel/cli'
 
 module TestSentinel
   class Error < StandardError; end
+  
+  DEFAULT_CONFIG_FILE = 'sentinel.yml'
 
   class << self
     def analyze(config_path = './sentinel.yml')

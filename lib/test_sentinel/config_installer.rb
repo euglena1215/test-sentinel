@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'config_helper'
+
 module TestSentinel
   class ConfigInstaller
     def initialize(directory)
@@ -8,8 +10,8 @@ module TestSentinel
 
     def install
       if config_exists?
-        puts "⚠️  Configuration file 'sentinel.yml' already exists."
-        puts "   Use --force to overwrite or remove the existing file."
+        puts "⚠️  Configuration file '#{DEFAULT_CONFIG_FILE}' already exists."
+        puts '   Use --force to overwrite or remove the existing file.'
         return
       end
 
@@ -19,8 +21,8 @@ module TestSentinel
       config_content = generate_config(project_type)
       write_config(config_content)
 
-      puts "✅ Configuration file 'sentinel.yml' created successfully!"
-      puts "   You can now run: test-sentinel generate"
+      puts "✅ Configuration file '#{DEFAULT_CONFIG_FILE}' created successfully!"
+      puts '   You can now run: test-sentinel generate'
     end
 
     private
@@ -30,7 +32,7 @@ module TestSentinel
     end
 
     def config_path
-      File.join(@directory, 'sentinel.yml')
+      File.join(@directory, DEFAULT_CONFIG_FILE)
     end
 
     def detect_project_type
@@ -56,7 +58,7 @@ module TestSentinel
     end
 
     def gem_project?
-      # Check for gem indicators  
+      # Check for gem indicators
       gemspec_files = Dir.glob(File.join(@directory, '*.gemspec'))
       lib_directory_exists = Dir.exist?(File.join(@directory, 'lib'))
 

@@ -1,14 +1,14 @@
-+----------------------+----------------------+------+-------+----------+------------+----------+
-| File                 | Method               | Line | Score | Coverage | Complexity | Commits  |
-+----------------------+----------------------+------+-------+----------+------------+----------+
-| app/models/user.rb   | can_access_feature?  |   21 | 10.15 |    50.0% |          7 |        0 |
-| app/models/user.rb   | calculate_discount   |   35 |  7.15 |    50.0% |          4 |        0 |
-| app/controllers/use… | index                |    6 |  4.30 |     0.0% |          1 |        0 |
-| app/controllers/use… | show                 |   16 |  4.30 |     0.0% |          1 |        0 |
-| app/controllers/use… | create               |   23 |  4.30 |     0.0% |          1 |        0 |
-| app/controllers/use… | update               |   34 |  4.30 |     0.0% |          1 |        0 |
-| app/controllers/use… | set_user             |   45 |  4.30 |     0.0% |          1 |        0 |
-| app/controllers/use… | user_params          |   49 |  4.30 |     0.0% |          1 |        0 |
-| app/controllers/use… | log_suspension_acti… |   53 |  4.30 |     0.0% |          1 |        0 |
-| app/controllers/use… | current_user         |   57 |  4.30 |     0.0% |          1 |        0 |
-+----------------------+----------------------+------+-------+----------+------------+----------+
++----------------------+---------------------+------+-------+----------+------------+----------+
+| File                 | Method              | Line | Score | Coverage | Complexity | Commits  |
++----------------------+---------------------+------+-------+----------+------------+----------+
+| app/models/user.rb   | can_access_feature? |   21 | 10.15 |    50.0% |          7 |        0 |
+| app/models/users/us… | display_name        |    5 |  8.90 |     0.0% |          5 |        0 |
+| app/models/user.rb   | calculate_discount  |   35 |  7.15 |    50.0% |          4 |        0 |
+| app/services/paymen… | calculate_fee       |    8 |  6.80 |    60.0% |          5 |        0 |
+| app/services/paymen… | process_payment     |   28 |  6.80 |    60.0% |          5 |        0 |
+| app/controllers/use… | index               |    6 |  4.30 |     0.0% |          1 |        0 |
+| app/controllers/use… | show                |   16 |  4.30 |     0.0% |          1 |        0 |
+| app/controllers/use… | create              |   23 |  4.30 |     0.0% |          1 |        0 |
+| app/controllers/use… | update              |   34 |  4.30 |     0.0% |          1 |        0 |
+| app/controllers/use… | set_user            |   45 |  4.30 |     0.0% |          1 |        0 |
++----------------------+---------------------+------+-------+----------+------------+----------+

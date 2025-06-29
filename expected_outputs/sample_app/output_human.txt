@@ -7,64 +7,64 @@
    Complexity: 7
    Git Commits: 0
 
-2. app/models/user.rb:35
+2. app/models/users/user_profile.rb:5
+   Method: display_name
+   Priority Score: 8.9
+   Coverage: 0.0%
+   Complexity: 5
+   Git Commits: 0
+
+3. app/models/user.rb:35
    Method: calculate_discount
    Priority Score: 7.15
    Coverage: 50.0%
    Complexity: 4
    Git Commits: 0
 
-3. app/controllers/users_controller.rb:6
+4. app/services/payment_service.rb:8
+   Method: calculate_fee
+   Priority Score: 6.8
+   Coverage: 60.0%
+   Complexity: 5
+   Git Commits: 0
+
+5. app/services/payment_service.rb:28
+   Method: process_payment
+   Priority Score: 6.8
+   Coverage: 60.0%
+   Complexity: 5
+   Git Commits: 0
+
+6. app/controllers/users_controller.rb:6
    Method: index
    Priority Score: 4.3
    Coverage: 0.0%
    Complexity: 1
    Git Commits: 0
 
-4. app/controllers/users_controller.rb:16
+7. app/controllers/users_controller.rb:16
    Method: show
    Priority Score: 4.3
    Coverage: 0.0%
    Complexity: 1
    Git Commits: 0
 
-5. app/controllers/users_controller.rb:23
+8. app/controllers/users_controller.rb:23
    Method: create
    Priority Score: 4.3
    Coverage: 0.0%
    Complexity: 1
    Git Commits: 0
 
-6. app/controllers/users_controller.rb:34
+9. app/controllers/users_controller.rb:34
    Method: update
    Priority Score: 4.3
    Coverage: 0.0%
    Complexity: 1
    Git Commits: 0
 
-7. app/controllers/users_controller.rb:45
+10. app/controllers/users_controller.rb:45
    Method: set_user
-   Priority Score: 4.3
-   Coverage: 0.0%
-   Complexity: 1
-   Git Commits: 0
-
-8. app/controllers/users_controller.rb:49
-   Method: user_params
-   Priority Score: 4.3
-   Coverage: 0.0%
-   Complexity: 1
-   Git Commits: 0
-
-9. app/controllers/users_controller.rb:53
-   Method: log_suspension_action
-   Priority Score: 4.3
-   Coverage: 0.0%
-   Complexity: 1
-   Git Commits: 0
-
-10. app/controllers/users_controller.rb:57
-   Method: current_user
    Priority Score: 4.3
    Coverage: 0.0%
    Complexity: 1

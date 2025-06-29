@@ -12,13 +12,13 @@ class SmokeTestUpdater
   end
 
   def run
-    puts "🔄 Updating smoke test expected outputs..."
-    
+    puts '🔄 Updating smoke test expected outputs...'
+
     smoke_projects.each do |project|
       puts "\n📁 Processing #{project[:name]}..."
       update_project_outputs(project)
     end
-    
+
     puts "\n✅ All smoke test expected outputs have been updated!"
   end
 
@@ -48,24 +48,28 @@ class SmokeTestUpdater
   def update_project_outputs(project)
     # Ensure expected outputs directory exists
     FileUtils.mkdir_p(project[:expected_path])
-    
+
     # Generate coverage data if needed
     generate_coverage_data(project)
-    
+
     # Generate outputs for each format
     %w[human json csv table].each do |format|
       puts "  📊 Generating #{format} format..."
-      
+
       command_output = if project[:is_rails]
-        # For Rails projects, run from within the project directory
-        `cd #{project[:dir]} && bundle exec test-sentinel generate --format #{format} --top-n 10 2>/dev/null`
-      else
-        # For non-Rails projects, run from project root with --directory option
-        `bundle exec test-sentinel generate --format #{format} --directory #{project[:dir]} --top-n 10 2>/dev/null`
-      end
-      
+                         # For Rails projects, run from within the project directory
+                         `cd #{project[:dir]} && bundle exec test-sentinel generate --format #{format} --top-n 10 2>/dev/null`
+                       else
+                         # For non-Rails projects, run from project root with --directory option
+                         `bundle exec test-sentinel generate --format #{format} --directory #{project[:dir]} --top-n 10 2>/dev/null`
+                       end
+
       if $?.success?
-        file_extension = format == 'json' ? 'json' : (format == 'csv' ? 'csv' : 'txt')
+        file_extension = if format == 'json'
+                           'json'
+                         else
+                           (format == 'csv' ? 'csv' : 'txt')
+                         end
         output_file = File.join(project[:expected_path], "output_#{format}.#{file_extension}")
         File.write(output_file, command_output)
         puts "    ✓ Saved to #{File.basename(output_file)}"
@@ -73,15 +77,15 @@ class SmokeTestUpdater
         puts "    ❌ Failed to generate #{format} format for #{project[:name]}"
       end
     end
-    
+
     # Clean up generated files
     cleanup_generated_files(project)
   end
 
   def generate_coverage_data(project)
     return if project[:is_rails] # Rails apps should already have coverage
-    
-    puts "  🧪 Generating coverage data..."
+
+    puts '  🧪 Generating coverage data...'
     Dir.chdir(project[:dir]) do
       if File.exist?('spec/spec_helper.rb')
         `bundle exec rspec --require spec_helper 2>/dev/null || true`
@@ -98,6 +102,4 @@ class SmokeTestUpdater
 end
 
 # Run the updater
-if __FILE__ == $0
-  SmokeTestUpdater.new.run
-end
+SmokeTestUpdater.new.run if __FILE__ == $0

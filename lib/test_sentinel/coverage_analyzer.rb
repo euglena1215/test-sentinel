@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require_relative 'base_analyzer'
+require_relative 'config_helper'
 
 module TestSentinel
-  class CoverageAnalyzer < BaseAnalyzer
+  class CoverageAnalyzer
     RESULTSET_PATH = 'coverage/.resultset.json'
 
     def self.analyze
@@ -18,20 +18,17 @@ module TestSentinel
 
       return {} unless resultset && resultset['coverage']
 
-      config = load_config
-      parse_coverage_data(resultset['coverage'], config)
+      parse_coverage_data(resultset['coverage'])
     rescue JSON::ParserError => e
       raise Error, "Failed to parse coverage data: #{e.message}"
     end
 
     private
 
-    def parse_coverage_data(coverage_data, config = nil)
-      # For backward compatibility with tests
-      config = load_config if config.nil?
+    def parse_coverage_data(coverage_data)
 
       results = {}
-      target_patterns = get_target_patterns(config)
+      target_patterns = ConfigHelper.get_target_patterns
 
       coverage_data.each do |file_path, line_coverage|
         next unless should_include_file_for_coverage?(file_path, target_patterns)
@@ -46,7 +43,7 @@ module TestSentinel
         next if total_lines.zero?
 
         coverage_rate = covered_lines.to_f / total_lines
-        relative_path = normalize_file_path(file_path)
+        relative_path = ConfigHelper.normalize_file_path(file_path)
 
         next if relative_path.nil?
 

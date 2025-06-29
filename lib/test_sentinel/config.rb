@@ -46,8 +46,7 @@ module TestSentinel
 
     def default_directory_weights
       [
-        { 'path' => 'app/**/*.rb', 'weight' => 1.0 },
-        { 'path' => 'lib/**/*.rb', 'weight' => 1.0 }
+        { 'path' => '**/*.rb', 'weight' => 1.0 }
       ]
     end
 

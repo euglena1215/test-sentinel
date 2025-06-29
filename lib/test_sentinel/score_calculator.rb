@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative 'config_helper'
 
 module TestSentinel
   class ScoreCalculator
@@ -10,10 +11,17 @@ module TestSentinel
     def calculate(coverage_data:, complexity_data:, git_data:)
       results = []
 
+      # Get target patterns from configuration using ConfigHelper
+      target_patterns = ConfigHelper.get_target_patterns
+
+      # Collect files from configured patterns and data sources
+      config_files = []
+      target_patterns.each do |pattern|
+        config_files.concat(Dir.glob(pattern))
+      end
+
       all_files = (
-        Dir.glob('app/**/*.rb') +
-        Dir.glob('lib/**/*.rb') +
-        Dir.glob('packs/**/*.rb') +
+        config_files +
         coverage_data.keys +
         complexity_data.keys +
         git_data.keys
@@ -105,6 +113,5 @@ module TestSentinel
         git_commits: git_data[file_path] || 0
       }
     end
-
   end
 end

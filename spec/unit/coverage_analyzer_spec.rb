@@ -6,6 +6,17 @@ require 'test_sentinel/coverage_analyzer'
 RSpec.describe TestSentinel::CoverageAnalyzer do
   describe '#parse_coverage_data' do
     subject(:analyzer) { described_class.new }
+    
+    # Mock config for path normalization only
+    before do
+      test_config = instance_double(TestSentinel::Config,
+        directory_weights: [
+          { 'path' => 'app/**/*.rb', 'weight' => 1.0 },
+          { 'path' => 'lib/**/*.rb', 'weight' => 1.0 }
+        ]
+      )
+      allow(TestSentinel::ConfigHelper).to receive(:load_config).and_return(test_config)
+    end
 
     context 'with valid coverage data for app/ files' do
       let(:coverage_data) do

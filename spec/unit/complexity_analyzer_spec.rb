@@ -8,15 +8,30 @@ RSpec.describe TestSentinel::ComplexityAnalyzer do
   describe '#run_rubocop' do
     subject(:analyzer) { described_class.new }
 
-    context 'when both app/ and lib/ directories exist' do
+    context 'when directories are found by dynamic detection' do
       before do
+        # Mock config to return specific patterns for testing
+        test_config = instance_double(TestSentinel::Config,
+          directory_weights: [
+            { 'path' => 'app/**/*.rb', 'weight' => 1.0 },
+            { 'path' => 'lib/**/*.rb', 'weight' => 1.0 }
+          ]
+        )
+        allow(TestSentinel::ConfigHelper).to receive(:load_config).and_return(test_config)
+        
+        # Mock PatternExpander to return expected directories
+        allow(TestSentinel::PatternExpander).to receive(:extract_base_directories)
+          .with(['app/**/*.rb', 'lib/**/*.rb'])
+          .and_return(['app', 'lib'])
+        
+        allow(Dir).to receive(:exist?).and_call_original
         allow(Dir).to receive(:exist?).with('app/').and_return(true)
         allow(Dir).to receive(:exist?).with('lib/').and_return(true)
         allow(analyzer).to receive(:`).and_return('{"files": []}')
         allow(analyzer).to receive(:last_exit_status).and_return(0)
       end
 
-      it 'runs rubocop on both directories' do
+      it 'runs rubocop on detected directories' do
         expected_command = 'bundle exec rubocop --format json --only Metrics/CyclomaticComplexity app/ lib/'
 
         expect(analyzer).to receive(:`).with("#{expected_command} 2>/dev/null")
@@ -25,15 +40,28 @@ RSpec.describe TestSentinel::ComplexityAnalyzer do
       end
     end
 
-    context 'when only app/ directory exists' do
+    context 'when only some directories exist' do
       before do
+        test_config = instance_double(TestSentinel::Config,
+          directory_weights: [
+            { 'path' => 'app/**/*.rb', 'weight' => 1.0 },
+            { 'path' => 'lib/**/*.rb', 'weight' => 1.0 }
+          ]
+        )
+        allow(TestSentinel::ConfigHelper).to receive(:load_config).and_return(test_config)
+        
+        allow(TestSentinel::PatternExpander).to receive(:extract_base_directories)
+          .with(['app/**/*.rb', 'lib/**/*.rb'])
+          .and_return(['app', 'lib'])
+        
+        allow(Dir).to receive(:exist?).and_call_original
         allow(Dir).to receive(:exist?).with('app/').and_return(true)
         allow(Dir).to receive(:exist?).with('lib/').and_return(false)
         allow(analyzer).to receive(:`).and_return('{"files": []}')
         allow(analyzer).to receive(:last_exit_status).and_return(0)
       end
 
-      it 'runs rubocop only on app/ directory' do
+      it 'runs rubocop only on existing directories' do
         expected_command = 'bundle exec rubocop --format json --only Metrics/CyclomaticComplexity app/'
 
         expect(analyzer).to receive(:`).with("#{expected_command} 2>/dev/null")
@@ -42,25 +70,21 @@ RSpec.describe TestSentinel::ComplexityAnalyzer do
       end
     end
 
-    context 'when only lib/ directory exists' do
+    context 'when no directories exist' do
       before do
-        allow(Dir).to receive(:exist?).with('app/').and_return(false)
-        allow(Dir).to receive(:exist?).with('lib/').and_return(true)
-        allow(analyzer).to receive(:`).and_return('{"files": []}')
-        allow(analyzer).to receive(:last_exit_status).and_return(0)
-      end
-
-      it 'runs rubocop only on lib/ directory' do
-        expected_command = 'bundle exec rubocop --format json --only Metrics/CyclomaticComplexity lib/'
-
-        expect(analyzer).to receive(:`).with("#{expected_command} 2>/dev/null")
-
-        analyzer.send(:run_rubocop)
-      end
-    end
-
-    context 'when neither app/ nor lib/ directories exist' do
-      before do
+        test_config = instance_double(TestSentinel::Config,
+          directory_weights: [
+            { 'path' => 'app/**/*.rb', 'weight' => 1.0 },
+            { 'path' => 'lib/**/*.rb', 'weight' => 1.0 }
+          ]
+        )
+        allow(TestSentinel::ConfigHelper).to receive(:load_config).and_return(test_config)
+        
+        allow(TestSentinel::PatternExpander).to receive(:extract_base_directories)
+          .with(['app/**/*.rb', 'lib/**/*.rb'])
+          .and_return(['app', 'lib'])
+        
+        allow(Dir).to receive(:exist?).and_call_original
         allow(Dir).to receive(:exist?).with('app/').and_return(false)
         allow(Dir).to receive(:exist?).with('lib/').and_return(false)
       end
@@ -73,8 +97,19 @@ RSpec.describe TestSentinel::ComplexityAnalyzer do
 
     context 'when bundle exec is not available' do
       before do
+        test_config = instance_double(TestSentinel::Config,
+          directory_weights: [
+            { 'path' => 'app/**/*.rb', 'weight' => 1.0 }
+          ]
+        )
+        allow(TestSentinel::ConfigHelper).to receive(:load_config).and_return(test_config)
+        
+        allow(TestSentinel::PatternExpander).to receive(:extract_base_directories)
+          .with(['app/**/*.rb'])
+          .and_return(['app'])
+        
+        allow(Dir).to receive(:exist?).and_call_original
         allow(Dir).to receive(:exist?).with('app/').and_return(true)
-        allow(Dir).to receive(:exist?).with('lib/').and_return(false)
         allow(analyzer).to receive(:last_exit_status).and_return(127, 0)
         allow(analyzer).to receive(:`).and_return('', '{"files": []}')
       end
@@ -95,8 +130,19 @@ RSpec.describe TestSentinel::ComplexityAnalyzer do
       end
 
       before do
+        test_config = instance_double(TestSentinel::Config,
+          directory_weights: [
+            { 'path' => 'app/**/*.rb', 'weight' => 1.0 }
+          ]
+        )
+        allow(TestSentinel::ConfigHelper).to receive(:load_config).and_return(test_config)
+        
+        allow(TestSentinel::PatternExpander).to receive(:extract_base_directories)
+          .with(['app/**/*.rb'])
+          .and_return(['app'])
+        
+        allow(Dir).to receive(:exist?).and_call_original
         allow(Dir).to receive(:exist?).with('app/').and_return(true)
-        allow(Dir).to receive(:exist?).with('lib/').and_return(false)
         allow(analyzer).to receive(:`).and_return(rubocop_output)
         allow(analyzer).to receive(:last_exit_status).and_return(0)
       end
@@ -110,6 +156,17 @@ RSpec.describe TestSentinel::ComplexityAnalyzer do
 
   describe '#parse_rubocop_output' do
     subject(:analyzer) { described_class.new }
+    
+    # Mock config for path normalization only
+    before do
+      test_config = instance_double(TestSentinel::Config,
+        directory_weights: [
+          { 'path' => 'app/**/*.rb', 'weight' => 1.0 },
+          { 'path' => 'lib/**/*.rb', 'weight' => 1.0 }
+        ]
+      )
+      allow(TestSentinel::ConfigHelper).to receive(:load_config).and_return(test_config)
+    end
 
     context 'with valid JSON output' do
       let(:rubocop_output) do

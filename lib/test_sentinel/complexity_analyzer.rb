@@ -3,10 +3,10 @@
 require 'English'
 require 'json'
 require 'set'
-require_relative 'base_analyzer'
+require_relative 'config_helper'
 
 module TestSentinel
-  class ComplexityAnalyzer < BaseAnalyzer
+  class ComplexityAnalyzer
     def self.analyze
       new.analyze
     end
@@ -39,7 +39,7 @@ module TestSentinel
         only: ['Metrics/CyclomaticComplexity']
       }
 
-      sentinel_config = load_config
+      sentinel_config = ConfigHelper.load_config
       rubocop_config = RuboCop::ConfigStore.new.for_pwd
       runner = RuboCop::Runner.new(options, rubocop_config)
 
@@ -51,7 +51,7 @@ module TestSentinel
     end
 
     def get_analysis_directories
-      config = load_config
+      config = ConfigHelper.load_config
       directories = extract_directories_from_config(config)
       directories.select { |dir| Dir.exist?(dir) }
     end
@@ -101,15 +101,7 @@ module TestSentinel
         file_path = file_data['path']
 
         # Use relative path for consistency
-        if file_path.include?('/app/')
-          relative_path = file_path.split('/app/').last
-          relative_path = "app/#{relative_path}" if relative_path
-        elsif file_path.include?('/lib/')
-          relative_path = file_path.split('/lib/').last
-          relative_path = "lib/#{relative_path}" if relative_path
-        else
-          relative_path = file_path
-        end
+        relative_path = ConfigHelper.normalize_file_path(file_path)
 
         next if relative_path.nil? || relative_path.empty?
 
@@ -159,7 +151,7 @@ module TestSentinel
       complexity_offenses = offenses.select { |offense| offense.cop_name == 'Metrics/CyclomaticComplexity' }
       return if complexity_offenses.empty?
 
-      relative_path = normalize_file_path(file)
+      relative_path = ConfigHelper.normalize_file_path(file)
       return if relative_path.nil? || relative_path.empty?
 
       @results[relative_path] ||= []
@@ -177,26 +169,6 @@ module TestSentinel
     end
 
     private
-
-    def normalize_file_path(file_path)
-      if @sentinel_config
-        # Use BaseAnalyzer's logic for normalization
-        base_analyzer = BaseAnalyzer.new
-        base_analyzer.send(:normalize_file_path, file_path, @sentinel_config)
-      else
-        # Fallback to original logic for backward compatibility
-        if file_path.include?('/app/')
-          relative_path = file_path.split('/app/').last
-          relative_path = "app/#{relative_path}" if relative_path
-        elsif file_path.include?('/lib/')
-          relative_path = file_path.split('/lib/').last
-          relative_path = "lib/#{relative_path}" if relative_path
-        else
-          relative_path = file_path
-        end
-        relative_path
-      end
-    end
 
     def extract_method_info_from_offense(offense)
       match = offense.message.match(%r{Cyclomatic complexity for `([^`]+)` is too high\. \[(\d+)/\d+\]})
