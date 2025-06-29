@@ -19,9 +19,9 @@ module TestSentinel
     def analyze(config_path = './sentinel.yml')
       config = Config.load(config_path)
 
-      coverage_data = CoverageAnalyzer.analyze
-      complexity_data = ComplexityAnalyzer.analyze
-      git_data = GitAnalyzer.analyze(config.git_history_days)
+      coverage_data = config.score_weights['coverage'] > 0 ? CoverageAnalyzer.analyze : {}
+      complexity_data = config.score_weights['complexity'] > 0 ? ComplexityAnalyzer.analyze : {}
+      git_data = config.score_weights['git_history'] > 0 ? GitAnalyzer.analyze(config.git_history_days) : {}
 
       ScoreCalculator.new(config).calculate(
         coverage_data: coverage_data,

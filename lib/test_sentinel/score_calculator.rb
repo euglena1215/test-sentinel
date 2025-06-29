@@ -82,15 +82,27 @@ module TestSentinel
     end
 
     def calculate_method_score(file_path, method_data, coverage_data, git_data)
-      coverage_factor = calculate_coverage_factor(file_path, method_data, coverage_data)
-      complexity_factor = method_data[:complexity] || 1
-      git_factor = git_data[file_path] || 0
-      directory_factor = @config.directory_weight_for(file_path)
+      score = 0.0
 
-      score = (@config.score_weights['coverage'] * coverage_factor) +
-              (@config.score_weights['complexity'] * complexity_factor) +
-              (@config.score_weights['git_history'] * git_factor) +
-              (@config.score_weights['directory'] * directory_factor)
+      if @config.score_weights['coverage'] > 0
+        coverage_factor = calculate_coverage_factor(file_path, method_data, coverage_data)
+        score += @config.score_weights['coverage'] * coverage_factor
+      end
+
+      if @config.score_weights['complexity'] > 0
+        complexity_factor = method_data[:complexity] || 1
+        score += @config.score_weights['complexity'] * complexity_factor
+      end
+
+      if @config.score_weights['git_history'] > 0
+        git_factor = git_data[file_path] || 0
+        score += @config.score_weights['git_history'] * git_factor
+      end
+
+      if @config.score_weights['directory'] > 0
+        directory_factor = @config.directory_weight_for(file_path)
+        score += @config.score_weights['directory'] * directory_factor
+      end
 
       score.round(2)
     end
