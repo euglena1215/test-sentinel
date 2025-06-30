@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module TestSentinel
+module CodeQualia
   class Logger
     class << self
       attr_accessor :verbose

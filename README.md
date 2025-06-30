@@ -1,23 +1,23 @@
-# Test Sentinel
+# Code Qualia
 
-**AI-powered test coverage analysis tool for Rails applications**
+**A tool for communicating developer intuition and code quality perception to AI through configurable parameters**
 
-Test Sentinel analyzes your codebase to identify methods that most urgently need test coverage based on code complexity, current coverage, git activity, and directory importance.
+Code Qualia helps developers express their subjective understanding and feelings about code quality to AI systems. By combining quantitative metrics (coverage, complexity, git activity) with configurable weights that reflect your development priorities and intuitions, it creates a "quality fingerprint" that AI can understand and use for better code analysis and recommendations.
 
 ## 🎯 Key Features
 
-- **Smart Prioritization**: Combines coverage data, code complexity, git history, and directory weights to score methods
-- **Multiple Data Sources**: Integrates with SimpleCov, RuboCop, and Git
-- **Configurable Weights**: Customize analysis parameters via YAML configuration
-- **CLI Interface**: Easy-to-use command line tool with JSON output
-- **CI/CD Ready**: GitHub Actions integration for automated analysis
+- **Developer Intuition Translation**: Convert your subjective code quality perceptions into quantifiable parameters
+- **Configurable Quality Weights**: Express what matters most to you - complexity, coverage, change frequency, or directory importance
+- **AI-Ready Output**: Generate structured data that AI systems can use to understand your code priorities
+- **Multiple Data Sources**: Integrates with SimpleCov, RuboCop, and Git to capture comprehensive code context
+- **Flexible Interface**: CLI tool with JSON, CSV, and human-readable output formats
 
 ## 🚀 Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'test_sentinel', group: [:development, :test]
+gem 'code_qualia', group: [:development, :test]
 ```
 
 And then execute:
@@ -32,8 +32,8 @@ bundle install
 First, generate a configuration file for your project:
 
 ```bash
-# Auto-detect project type and generate sentinel.yml
-bundle exec test-sentinel install
+# Auto-detect project type and generate qualia.yml
+bundle exec code-qualia install
 ```
 
 This command automatically detects whether you're working with a Rails application or a Ruby gem and generates an appropriate configuration file.
@@ -42,18 +42,18 @@ This command automatically detects whether you're working with a Rails applicati
 
 ```bash
 # Analyze top 3 methods (default)
-bundle exec test-sentinel generate
+bundle exec code-qualia generate
 
 # Analyze top 10 methods  
-bundle exec test-sentinel generate --top-n 10
+bundle exec code-qualia generate --top-n 10
 
 # Use custom config file
-bundle exec test-sentinel generate --config custom_sentinel.yml
+bundle exec code-qualia generate --config custom_qualia.yml
 
 # Output in different formats
-bundle exec test-sentinel generate --format json
-bundle exec test-sentinel generate --format csv
-bundle exec test-sentinel generate --format table
+bundle exec code-qualia generate --format json
+bundle exec code-qualia generate --format csv
+bundle exec code-qualia generate --format table
 ```
 
 ### Sample Output
@@ -77,12 +77,12 @@ bundle exec test-sentinel generate --format table
    Complexity: 5
    Git Commits: 0
 
-📄 Detailed analysis saved to test_sentinel_analysis.json
+📄 Detailed analysis saved to code_qualia_analysis.json
 ```
 
 ## ⚙️ Configuration
 
-Create a `sentinel.yml` file in your project root:
+Create a `qualia.yml` file in your project root:
 
 ```yaml
 # Weights for priority score calculation
@@ -120,7 +120,7 @@ git_history_days: 90
 
 ## 🏗️ How It Works
 
-Test Sentinel calculates a priority score for each method using:
+Code Qualia calculates a priority score for each method using:
 
 **Score = (W_cov × CoverageFactor) + (W_comp × ComplexityFactor) + (W_git × GitFactor) + (W_dir × DirectoryFactor)**
 
@@ -130,34 +130,6 @@ Where:
 - **GitFactor**: Number of commits in specified time period
 - **DirectoryFactor**: Weight based on file location
 
-## 🚢 CI/CD Integration
-
-### GitHub Actions
-
-```yaml
-name: Test Sentinel Analysis
-
-on: [push, pull_request]
-
-jobs:
-  test_sentinel:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        bundler-cache: true
-    - name: Run tests with coverage
-      run: bundle exec rspec
-    - name: Run Test Sentinel analysis  
-      run: bundle exec test-sentinel generate --top-n 10
-    - name: Upload analysis results
-      uses: actions/upload-artifact@v4
-      with:
-        name: test-sentinel-analysis
-        path: test_sentinel_analysis.json
-```
 
 ## 🧪 Development
 
@@ -173,11 +145,11 @@ bundle exec rspec spec/integration/
 
 ### Smoke Testing
 
-Test Sentinel includes a comprehensive smoke test suite that validates functionality against a sample Rails application in the `smoke/sample_app` directory.
+Code Qualia includes a comprehensive smoke test suite that validates functionality against a sample Rails application in the `smoke/sample_app` directory.
 
 ## 📊 Output Formats
 
-Test Sentinel supports multiple output formats for flexibility:
+Code Qualia supports multiple output formats for flexibility:
 
 ### Human-readable (default)
 ```
@@ -226,8 +198,8 @@ app/models/user.rb,can_access_feature?,19,9.55,50.0,7,0
 
 All formats can be redirected to files using standard Unix redirection:
 ```bash
-bundle exec test-sentinel generate --format json > analysis.json
-bundle exec test-sentinel generate --format csv > analysis.csv
+bundle exec code-qualia generate --format json > analysis.json
+bundle exec code-qualia generate --format csv > analysis.csv
 ```
 
 ## 🤝 Contributing

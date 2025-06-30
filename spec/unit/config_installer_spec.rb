@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'test_sentinel/config_installer'
+require 'code_qualia/config_installer'
 require 'tmpdir'
 
-RSpec.describe TestSentinel::ConfigInstaller do
-  let(:temp_dir) { File.join(Dir.tmpdir, 'test-sentinel-spec') }
+RSpec.describe CodeQualia::ConfigInstaller do
+  let(:temp_dir) { File.join(Dir.tmpdir, 'code-qualia-spec') }
   let(:installer) { described_class.new(temp_dir) }
 
   before do
@@ -17,11 +17,11 @@ RSpec.describe TestSentinel::ConfigInstaller do
   end
 
   describe '#install' do
-    context 'when sentinel.yml does not exist' do
+    context 'when qualia.yml does not exist' do
       it 'creates a configuration file' do
-        expect { installer.install }.to output(/Configuration file 'sentinel.yml' created successfully!/).to_stdout
+        expect { installer.install }.to output(/Configuration file 'qualia.yml' created successfully!/).to_stdout
 
-        config_path = File.join(temp_dir, 'sentinel.yml')
+        config_path = File.join(temp_dir, 'qualia.yml')
         expect(File.exist?(config_path)).to be true
       end
 
@@ -37,7 +37,7 @@ RSpec.describe TestSentinel::ConfigInstaller do
         it 'generates Rails-specific configuration' do
           expect { installer.install }.to output(/Detected project type: Rails application/).to_stdout
 
-          config_path = File.join(temp_dir, 'sentinel.yml')
+          config_path = File.join(temp_dir, 'qualia.yml')
           config_content = File.read(config_path)
 
           expect(config_content).to include('app/models/**/*.rb')
@@ -58,7 +58,7 @@ RSpec.describe TestSentinel::ConfigInstaller do
         it 'generates gem-specific configuration' do
           expect { installer.install }.to output(/Detected project type: Ruby gem/).to_stdout
 
-          config_path = File.join(temp_dir, 'sentinel.yml')
+          config_path = File.join(temp_dir, 'qualia.yml')
           config_content = File.read(config_path)
 
           expect(config_content).to include('lib/**/*.rb')
@@ -71,7 +71,7 @@ RSpec.describe TestSentinel::ConfigInstaller do
         it 'generates default configuration' do
           expect { installer.install }.to output(/Detected project type: Ruby project/).to_stdout
 
-          config_path = File.join(temp_dir, 'sentinel.yml')
+          config_path = File.join(temp_dir, 'qualia.yml')
           config_content = File.read(config_path)
 
           expect(config_content).to include('app/**/*.rb')
@@ -80,16 +80,16 @@ RSpec.describe TestSentinel::ConfigInstaller do
       end
     end
 
-    context 'when sentinel.yml already exists' do
+    context 'when qualia.yml already exists' do
       before do
-        config_path = File.join(temp_dir, 'sentinel.yml')
+        config_path = File.join(temp_dir, 'qualia.yml')
         File.write(config_path, 'existing config')
       end
 
       it 'does not overwrite the existing file' do
-        expect { installer.install }.to output(/Configuration file 'sentinel.yml' already exists/).to_stdout
+        expect { installer.install }.to output(/Configuration file 'qualia.yml' already exists/).to_stdout
 
-        config_path = File.join(temp_dir, 'sentinel.yml')
+        config_path = File.join(temp_dir, 'qualia.yml')
         expect(File.read(config_path)).to eq('existing config')
       end
     end

@@ -1,21 +1,21 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'test_sentinel/git_analyzer'
+require 'code_qualia/git_analyzer'
 
-RSpec.describe TestSentinel::GitAnalyzer do
+RSpec.describe CodeQualia::GitAnalyzer do
   describe '#parse_git_log' do
     subject(:analyzer) { described_class.new }
     
     # Mock config for path normalization only
     before do
-      test_config = instance_double(TestSentinel::Config,
+      test_config = instance_double(CodeQualia::Config,
         directory_weights: [
           { 'path' => 'app/**/*.rb', 'weight' => 1.0 },
           { 'path' => 'lib/**/*.rb', 'weight' => 1.0 }
         ]
       )
-      allow(TestSentinel::ConfigHelper).to receive(:load_config).and_return(test_config)
+      allow(CodeQualia::ConfigHelper).to receive(:load_config).and_return(test_config)
     end
 
     context 'with valid git log output containing app/ files' do
@@ -43,9 +43,9 @@ RSpec.describe TestSentinel::GitAnalyzer do
     context 'with valid git log output containing lib/ files' do
       let(:git_output) do
         <<~OUTPUT
-          lib/test_sentinel/analyzer.rb
-          lib/test_sentinel/coverage.rb
-          lib/test_sentinel/analyzer.rb
+          lib/code_qualia/analyzer.rb
+          lib/code_qualia/coverage.rb
+          lib/code_qualia/analyzer.rb
         OUTPUT
       end
 
@@ -53,8 +53,8 @@ RSpec.describe TestSentinel::GitAnalyzer do
         result = analyzer.send(:parse_git_log, git_output)
 
         expect(result).to eq({
-                               'lib/test_sentinel/analyzer.rb' => 2,
-                               'lib/test_sentinel/coverage.rb' => 1
+                               'lib/code_qualia/analyzer.rb' => 2,
+                               'lib/code_qualia/coverage.rb' => 1
                              })
       end
     end

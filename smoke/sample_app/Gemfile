@@ -30,6 +30,6 @@ group :development, :test do
   # Static analysis for code metrics
   gem 'rubocop', require: false
 
-  # Test Sentinel - AI-powered test coverage analysis
-  gem 'test_sentinel', path: '../..'
+  # Code Qualia - AI-powered test coverage analysis
+  gem 'code_qualia', path: '../..'
 end

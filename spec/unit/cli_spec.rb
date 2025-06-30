@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'test_sentinel'
+require 'code_qualia'
 
-RSpec.describe TestSentinel::CLI do
+RSpec.describe CodeQualia::CLI do
   let(:cli) { described_class.new(argv) }
 
   describe '#initialize' do
@@ -14,7 +14,7 @@ RSpec.describe TestSentinel::CLI do
       options = cli.instance_variable_get(:@options)
       
       expect(options[:top_n]).to eq(3)
-      expect(options[:config]).to eq('./sentinel.yml')
+      expect(options[:config]).to eq('./qualia.yml')
       expect(options[:directory]).to eq(Dir.pwd)
       expect(options[:format]).to eq('human')
     end

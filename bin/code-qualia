@@ -7,6 +7,6 @@ require 'pathname'
 lib_path = Pathname.new(__FILE__).dirname.parent.join('lib')
 $LOAD_PATH.unshift(lib_path) unless $LOAD_PATH.include?(lib_path.to_s)
 
-require 'test_sentinel'
+require 'code_qualia'
 
-TestSentinel::CLI.new(ARGV).run
+CodeQualia::CLI.new(ARGV).run

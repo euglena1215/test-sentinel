@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    test_sentinel (0.1.0)
+    code_qualia (0.1.0)
 
 GEM
   remote: https://rubygems.org/
@@ -64,10 +64,10 @@ PLATFORMS
 
 DEPENDENCIES
   bundler (~> 2.0)
+  code_qualia!
   rspec (~> 3.0)
   rubocop
   simplecov
-  test_sentinel!
 
 BUNDLED WITH
    2.5.22

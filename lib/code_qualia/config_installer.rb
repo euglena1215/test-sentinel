@@ -2,7 +2,7 @@
 
 require_relative 'config_helper'
 
-module TestSentinel
+module CodeQualia
   class ConfigInstaller
     def initialize(directory)
       @directory = File.expand_path(directory)
@@ -22,7 +22,7 @@ module TestSentinel
       write_config(config_content)
 
       puts "✅ Configuration file '#{DEFAULT_CONFIG_FILE}' created successfully!"
-      puts '   You can now run: test-sentinel generate'
+      puts '   You can now run: code-qualia generate'
     end
 
     private

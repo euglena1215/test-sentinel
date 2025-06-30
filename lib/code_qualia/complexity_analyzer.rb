@@ -6,7 +6,7 @@ require 'set'
 require_relative 'config_helper'
 require_relative 'logger'
 
-module TestSentinel
+module CodeQualia
   class ComplexityAnalyzer
     def self.analyze
       new.analyze

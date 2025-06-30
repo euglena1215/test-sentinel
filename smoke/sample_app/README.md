@@ -1,10 +1,10 @@
-# Sample Rails Application with Test Sentinel
+# Sample Rails Application with Code Qualia
 
-This is a sample Rails application demonstrating the integration of Test Sentinel, an AI-powered test coverage analysis tool.
+This is a sample Rails application demonstrating the integration of Code Qualia, an AI-powered test coverage analysis tool.
 
-## Test Sentinel Integration
+## Code Qualia Integration
 
-Test Sentinel analyzes your codebase to identify methods that most urgently need test coverage based on:
+Code Qualia analyzes your codebase to identify methods that most urgently need test coverage based on:
 
 - **Test Coverage**: Methods with low coverage get higher priority
 - **Code Complexity**: Complex methods (high cyclomatic complexity) are prioritized  
@@ -16,30 +16,30 @@ Test Sentinel analyzes your codebase to identify methods that most urgently need
 #### Basic Analysis
 ```bash
 # Analyze top 3 methods (default)
-bundle exec test-sentinel generate
+bundle exec code-qualia generate
 
 # Analyze top 10 methods
-bundle exec test-sentinel generate --top-n 10
+bundle exec code-qualia generate --top-n 10
 
 # Use custom config file
-bundle exec test-sentinel generate --config custom_sentinel.yml
+bundle exec code-qualia generate --config custom_qualia.yml
 ```
 
 #### Using Rake Tasks
 ```bash
 # Quick analysis (top 5)
-bundle exec rake test_sentinel:analyze
+bundle exec rake code_qualia:analyze
 
 # Full analysis (top 10)  
-bundle exec rake test_sentinel:full_analysis
+bundle exec rake code_qualia:full_analysis
 
 # Custom number of methods
-bundle exec rake test_sentinel:analyze[7]
+bundle exec rake code_qualia:analyze[7]
 ```
 
 ### Configuration
 
-Test Sentinel can be configured via `sentinel.yml`:
+Code Qualia can be configured via `qualia.yml`:
 
 ```yaml
 score_weights:
@@ -79,15 +79,15 @@ exclude:
    Complexity: 5
    Git Commits: 0
 
-📄 Detailed analysis saved to test_sentinel_analysis.json
+📄 Detailed analysis saved to code_qualia_analysis.json
 ```
 
 ### CI/CD Integration
 
-Test Sentinel is integrated into the GitHub Actions workflow to:
+Code Qualia is integrated into the GitHub Actions workflow to:
 
 1. Run tests and generate coverage data
-2. Analyze codebase with Test Sentinel
+2. Analyze codebase with Code Qualia
 3. Upload analysis results as artifacts
 4. Provide feedback on test coverage gaps
 
@@ -98,14 +98,14 @@ Test Sentinel is integrated into the GitHub Actions workflow to:
    bundle exec rspec
    ```
 
-2. Run Test Sentinel analysis:
+2. Run Code Qualia analysis:
    ```bash
-   bundle exec test-sentinel generate
+   bundle exec code-qualia generate
    ```
 
 3. Review the JSON output for detailed recommendations:
    ```bash
-   cat test_sentinel_analysis.json
+   cat code_qualia_analysis.json
    ```
 
 ## Application Structure
@@ -115,9 +115,9 @@ This sample app includes:
 - **User model** with complex business logic methods
 - **PaymentService** with various payment processing methods  
 - **UsersController** with standard CRUD operations
-- **RSpec tests** with partial coverage to demonstrate Test Sentinel's capabilities
+- **RSpec tests** with partial coverage to demonstrate Code Qualia's capabilities
 
-The application is intentionally designed with some methods having low test coverage to showcase Test Sentinel's analysis capabilities.
+The application is intentionally designed with some methods having low test coverage to showcase Code Qualia's analysis capabilities.
 
 ## Setup
 
@@ -145,7 +145,7 @@ The application is intentionally designed with some methods having low test cove
    bundle exec rspec
    ```
 
-4. Analyze with Test Sentinel:
+4. Analyze with Code Qualia:
    ```bash
-   bundle exec test-sentinel generate
+   bundle exec code-qualia generate
    ```

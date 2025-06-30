@@ -2,25 +2,25 @@
 
 require 'English'
 require 'spec_helper'
-require 'test_sentinel/complexity_analyzer'
+require 'code_qualia/complexity_analyzer'
 
-RSpec.describe TestSentinel::ComplexityAnalyzer do
+RSpec.describe CodeQualia::ComplexityAnalyzer do
   describe '#run_rubocop' do
     subject(:analyzer) { described_class.new }
 
     context 'when directories are found by dynamic detection' do
       before do
         # Mock config to return specific patterns for testing
-        test_config = instance_double(TestSentinel::Config,
+        test_config = instance_double(CodeQualia::Config,
           directory_weights: [
             { 'path' => 'app/**/*.rb', 'weight' => 1.0 },
             { 'path' => 'lib/**/*.rb', 'weight' => 1.0 }
           ]
         )
-        allow(TestSentinel::ConfigHelper).to receive(:load_config).and_return(test_config)
+        allow(CodeQualia::ConfigHelper).to receive(:load_config).and_return(test_config)
         
         # Mock PatternExpander to return expected directories
-        allow(TestSentinel::PatternExpander).to receive(:extract_base_directories)
+        allow(CodeQualia::PatternExpander).to receive(:extract_base_directories)
           .with(['app/**/*.rb', 'lib/**/*.rb'])
           .and_return(['app', 'lib'])
         
@@ -42,15 +42,15 @@ RSpec.describe TestSentinel::ComplexityAnalyzer do
 
     context 'when only some directories exist' do
       before do
-        test_config = instance_double(TestSentinel::Config,
+        test_config = instance_double(CodeQualia::Config,
           directory_weights: [
             { 'path' => 'app/**/*.rb', 'weight' => 1.0 },
             { 'path' => 'lib/**/*.rb', 'weight' => 1.0 }
           ]
         )
-        allow(TestSentinel::ConfigHelper).to receive(:load_config).and_return(test_config)
+        allow(CodeQualia::ConfigHelper).to receive(:load_config).and_return(test_config)
         
-        allow(TestSentinel::PatternExpander).to receive(:extract_base_directories)
+        allow(CodeQualia::PatternExpander).to receive(:extract_base_directories)
           .with(['app/**/*.rb', 'lib/**/*.rb'])
           .and_return(['app', 'lib'])
         
@@ -72,15 +72,15 @@ RSpec.describe TestSentinel::ComplexityAnalyzer do
 
     context 'when no directories exist' do
       before do
-        test_config = instance_double(TestSentinel::Config,
+        test_config = instance_double(CodeQualia::Config,
           directory_weights: [
             { 'path' => 'app/**/*.rb', 'weight' => 1.0 },
             { 'path' => 'lib/**/*.rb', 'weight' => 1.0 }
           ]
         )
-        allow(TestSentinel::ConfigHelper).to receive(:load_config).and_return(test_config)
+        allow(CodeQualia::ConfigHelper).to receive(:load_config).and_return(test_config)
         
-        allow(TestSentinel::PatternExpander).to receive(:extract_base_directories)
+        allow(CodeQualia::PatternExpander).to receive(:extract_base_directories)
           .with(['app/**/*.rb', 'lib/**/*.rb'])
           .and_return(['app', 'lib'])
         
@@ -97,14 +97,14 @@ RSpec.describe TestSentinel::ComplexityAnalyzer do
 
     context 'when bundle exec is not available' do
       before do
-        test_config = instance_double(TestSentinel::Config,
+        test_config = instance_double(CodeQualia::Config,
           directory_weights: [
             { 'path' => 'app/**/*.rb', 'weight' => 1.0 }
           ]
         )
-        allow(TestSentinel::ConfigHelper).to receive(:load_config).and_return(test_config)
+        allow(CodeQualia::ConfigHelper).to receive(:load_config).and_return(test_config)
         
-        allow(TestSentinel::PatternExpander).to receive(:extract_base_directories)
+        allow(CodeQualia::PatternExpander).to receive(:extract_base_directories)
           .with(['app/**/*.rb'])
           .and_return(['app'])
         
@@ -130,14 +130,14 @@ RSpec.describe TestSentinel::ComplexityAnalyzer do
       end
 
       before do
-        test_config = instance_double(TestSentinel::Config,
+        test_config = instance_double(CodeQualia::Config,
           directory_weights: [
             { 'path' => 'app/**/*.rb', 'weight' => 1.0 }
           ]
         )
-        allow(TestSentinel::ConfigHelper).to receive(:load_config).and_return(test_config)
+        allow(CodeQualia::ConfigHelper).to receive(:load_config).and_return(test_config)
         
-        allow(TestSentinel::PatternExpander).to receive(:extract_base_directories)
+        allow(CodeQualia::PatternExpander).to receive(:extract_base_directories)
           .with(['app/**/*.rb'])
           .and_return(['app'])
         
@@ -159,13 +159,13 @@ RSpec.describe TestSentinel::ComplexityAnalyzer do
     
     # Mock config for path normalization only
     before do
-      test_config = instance_double(TestSentinel::Config,
+      test_config = instance_double(CodeQualia::Config,
         directory_weights: [
           { 'path' => 'app/**/*.rb', 'weight' => 1.0 },
           { 'path' => 'lib/**/*.rb', 'weight' => 1.0 }
         ]
       )
-      allow(TestSentinel::ConfigHelper).to receive(:load_config).and_return(test_config)
+      allow(CodeQualia::ConfigHelper).to receive(:load_config).and_return(test_config)
     end
 
     context 'with valid JSON output' do
@@ -195,7 +195,7 @@ RSpec.describe TestSentinel::ComplexityAnalyzer do
                 ]
               },
               {
-                "path": "/full/path/to/lib/test_sentinel/analyzer.rb",
+                "path": "/full/path/to/lib/code_qualia/analyzer.rb",
                 "offenses": [
                   {
                     "severity": "convention",
@@ -228,8 +228,8 @@ RSpec.describe TestSentinel::ComplexityAnalyzer do
       it 'parses complexity data correctly for app/ files' do
         result = analyzer.send(:parse_rubocop_output, rubocop_output)
 
-        expect(result).to have_key('app/models/user.rb')
-        expect(result['app/models/user.rb']).to contain_exactly(
+        expect(result).to have_key('/full/path/to/app/models/user.rb')
+        expect(result['/full/path/to/app/models/user.rb']).to contain_exactly(
           {
             method_name: 'complex_method',
             line_number: 15,
@@ -241,8 +241,8 @@ RSpec.describe TestSentinel::ComplexityAnalyzer do
       it 'parses complexity data correctly for lib/ files' do
         result = analyzer.send(:parse_rubocop_output, rubocop_output)
 
-        expect(result).to have_key('lib/test_sentinel/analyzer.rb')
-        expect(result['lib/test_sentinel/analyzer.rb']).to contain_exactly(
+        expect(result).to have_key('/full/path/to/lib/code_qualia/analyzer.rb')
+        expect(result['/full/path/to/lib/code_qualia/analyzer.rb']).to contain_exactly(
           {
             method_name: 'analyze_data',
             line_number: 42,
@@ -348,8 +348,8 @@ RSpec.describe TestSentinel::ComplexityAnalyzer do
       it 'extracts JSON portion correctly' do
         result = analyzer.send(:parse_rubocop_output, mixed_output)
 
-        expect(result).to have_key('app/services/payment.rb')
-        expect(result['app/services/payment.rb']).to contain_exactly(
+        expect(result).to have_key('/full/path/to/app/services/payment.rb')
+        expect(result['/full/path/to/app/services/payment.rb']).to contain_exactly(
           {
             method_name: 'process_payment',
             line_number: 20,

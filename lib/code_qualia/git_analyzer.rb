@@ -4,7 +4,7 @@ require 'date'
 require_relative 'config_helper'
 require_relative 'logger'
 
-module TestSentinel
+module CodeQualia
   class GitAnalyzer
     def self.analyze(days = 90)
       new(days).analyze

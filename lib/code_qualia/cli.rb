@@ -2,15 +2,15 @@
 
 require 'optparse'
 require 'json'
-require_relative '../test_sentinel'
+require_relative '../code_qualia'
 
-module TestSentinel
+module CodeQualia
   class CLI
     def initialize(argv)
       @argv = argv
       @options = {
         top_n: 3,
-        config: './sentinel.yml',
+        config: './qualia.yml',
         directory: Dir.pwd,
         format: 'human',
         verbose: false
@@ -34,7 +34,7 @@ module TestSentinel
 
     def parse_options
       parser = OptionParser.new do |opts|
-        opts.banner = 'Usage: test-sentinel [command] [options]'
+        opts.banner = 'Usage: code-qualia [command] [options]'
         opts.separator ''
         opts.separator 'Commands:'
         opts.separator '  generate    Analyze codebase and generate test recommendations'
@@ -46,7 +46,7 @@ module TestSentinel
           @options[:top_n] = n
         end
 
-        opts.on('--config PATH', String, 'Path to configuration file (default: ./sentinel.yml)') do |path|
+        opts.on('--config PATH', String, 'Path to configuration file (default: ./qualia.yml)') do |path|
           @options[:config] = path
         end
 
@@ -83,7 +83,7 @@ module TestSentinel
         # Change to target directory for analysis
         Dir.chdir(@options[:directory])
 
-        results = TestSentinel.analyze(@options[:config], verbose: @options[:verbose])
+        results = CodeQualia.analyze(@options[:config], verbose: @options[:verbose])
 
         if results.empty?
           case @options[:format]
@@ -111,7 +111,7 @@ module TestSentinel
         else # 'human'
           output_human_format(top_results)
         end
-      rescue TestSentinel::Error => e
+      rescue CodeQualia::Error => e
         puts "❌ Error: #{e.message}"
         exit 1
       rescue StandardError => e
@@ -192,9 +192,9 @@ module TestSentinel
     end
 
     def install_config
-      installer = TestSentinel::ConfigInstaller.new(@options[:directory])
+      installer = CodeQualia::ConfigInstaller.new(@options[:directory])
       installer.install
-    rescue TestSentinel::Error => e
+    rescue CodeQualia::Error => e
       puts "❌ Error: #{e.message}"
       exit 1
     rescue StandardError => e
@@ -203,15 +203,15 @@ module TestSentinel
     end
 
     def show_help
-      puts 'test-sentinel - AI-powered test coverage analysis tool'
+      puts 'code-qualia - AI-powered test coverage analysis tool'
       puts ''
-      puts 'Usage: test-sentinel [command] [options]'
+      puts 'Usage: code-qualia [command] [options]'
       puts ''
       puts 'Commands:'
       puts '  generate    Analyze codebase and generate test recommendations'
       puts '  install     Setup configuration file for your project'
       puts ''
-      puts "Run 'test-sentinel [command] --help' for more information."
+      puts "Run 'code-qualia [command] --help' for more information."
     end
   end
 end

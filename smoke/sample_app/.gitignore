@@ -34,7 +34,4 @@
 # Test coverage reports
 /coverage/
 
-# Test Sentinel analysis output
-test_sentinel_analysis.json
-
 /log/

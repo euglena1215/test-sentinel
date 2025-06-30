@@ -2,7 +2,7 @@
 
 require_relative 'pattern_expander'
 
-module TestSentinel
+module CodeQualia
   class Config
     attr_reader :score_weights, :directory_weights, :exclude_patterns, :git_history_days
 

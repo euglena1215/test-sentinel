@@ -1,7 +1,7 @@
 PATH
   remote: ../..
   specs:
-    test_sentinel (0.1.0)
+    code_qualia (0.1.0)
 
 GEM
   remote: https://rubygems.org/
@@ -359,7 +359,7 @@ DEPENDENCIES
   rubocop
   simplecov
   sqlite3 (>= 2.1)
-  test_sentinel!
+  code_qualia!
   tzinfo-data
 
 BUNDLED WITH

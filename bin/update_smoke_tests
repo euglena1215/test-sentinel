@@ -58,10 +58,10 @@ class SmokeTestUpdater
 
       command_output = if project[:is_rails]
                          # For Rails projects, run from within the project directory
-                         `cd #{project[:dir]} && bundle exec test-sentinel generate --format #{format} --top-n 10 2>/dev/null`
+                         `cd #{project[:dir]} && bundle exec code-qualia generate --format #{format} --top-n 10 2>&1`
                        else
                          # For non-Rails projects, run from project root with --directory option
-                         `bundle exec test-sentinel generate --format #{format} --directory #{project[:dir]} --top-n 10 2>/dev/null`
+                         `bundle exec code-qualia generate --format #{format} --directory #{project[:dir]} --top-n 10 2>&1`
                        end
 
       if $?.success?
@@ -75,6 +75,7 @@ class SmokeTestUpdater
         puts "    ✓ Saved to #{File.basename(output_file)}"
       else
         puts "    ❌ Failed to generate #{format} format for #{project[:name]}"
+        puts "    Error output: #{command_output}"
       end
     end
 
@@ -97,7 +98,7 @@ class SmokeTestUpdater
   end
 
   def cleanup_generated_files(project)
-    generated_json_path = File.join(project[:dir], 'test_sentinel_analysis.json')
+    generated_json_path = File.join(project[:dir], 'code_qualia_analysis.json')
     File.delete(generated_json_path) if File.exist?(generated_json_path)
   end
 end

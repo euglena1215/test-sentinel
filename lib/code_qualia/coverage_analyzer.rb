@@ -3,7 +3,7 @@
 require_relative 'config_helper'
 require_relative 'logger'
 
-module TestSentinel
+module CodeQualia
   class CoverageAnalyzer
     RESULTSET_PATH = 'coverage/.resultset.json'
 

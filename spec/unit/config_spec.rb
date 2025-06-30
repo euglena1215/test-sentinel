@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'test_sentinel/config'
+require 'code_qualia/config'
 
-RSpec.describe TestSentinel::Config do
+RSpec.describe CodeQualia::Config do
   describe '#initialize' do
     context 'with directory_weights containing brace patterns' do
       let(:config_data) do

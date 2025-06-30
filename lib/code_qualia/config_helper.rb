@@ -4,7 +4,7 @@ require 'pathname'
 require_relative 'pattern_expander'
 require_relative 'config'
 
-module TestSentinel
+module CodeQualia
   class ConfigHelper
     class << self
       # Gets target file patterns from configuration and expands them to glob patterns.
@@ -97,13 +97,13 @@ module TestSentinel
         file_path
       end
 
-      # Loads the Test Sentinel configuration from file or returns default configuration.
+      # Loads the Code Qualia configuration from file or returns default configuration.
       #
       # This method attempts to load the configuration from the default config file
-      # (sentinel.yml). If the file doesn't exist, it returns a new Config instance
+      # (qualia.yml). If the file doesn't exist, it returns a new Config instance
       # with default values.
       #
-      # @return [TestSentinel::Config] Loaded configuration or default configuration
+      # @return [CodeQualia::Config] Loaded configuration or default configuration
       # @example
       #   config = ConfigHelper.load_config
       #   puts config.directory_weights

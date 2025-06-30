@@ -1,10 +1,10 @@
-# Gemini Development Guidelines for test-sentinel
+# Gemini Development Guidelines for code-qualia
 
-This document outlines the conventions and guidelines for developing the `test-sentinel` project with Gemini.
+This document outlines the conventions and guidelines for developing the `code-qualia` project with Gemini.
 
 ## Project Overview
 
-`test-sentinel` is an AI-powered test coverage analysis tool for Rails applications. It analyzes the codebase to identify methods that most urgently need test coverage based on code complexity, current coverage, git activity, and directory importance.
+`code-qualia` is an AI-powered test coverage analysis tool for Rails applications. It analyzes the codebase to identify methods that most urgently need test coverage based on code complexity, current coverage, git activity, and directory importance.
 
 ## Common Commands
 
@@ -29,25 +29,25 @@ bundle exec rubocop -A
 ### Running the Tool
 ```bash
 # Analyze the top 3 methods
-bundle exec test-sentinel generate
+bundle exec code-qualia generate
 
 # Analyze the top 10 methods
-bundle exec test-sentinel generate --top-n 10
+bundle exec code-qualia generate --top-n 10
 
 # Analyze a different directory
-bundle exec test-sentinel generate --directory ./smoke/sample_app --top-n 5
+bundle exec code-qualia generate --directory ./smoke/sample_app --top-n 5
 ```
 
 ## Architecture
 
-The core logic resides in `lib/test_sentinel/`. The analysis pipeline is as follows:
+The core logic resides in `lib/code_qualia/`. The analysis pipeline is as follows:
 
 1.  **`CoverageAnalyzer`**: Parses `simplecov`'s `.resultset.json`.
 2.  **`ComplexityAnalyzer`**: Uses `rubocop` to get cyclomatic complexity.
 3.  **`GitAnalyzer`**: Analyzes `git log` to count file changes.
 4.  **`ScoreCalculator`**: Combines the data from the analyzers to rank methods.
 
-The main entry point that orchestrates this pipeline is `lib/test_sentinel.rb`.
+The main entry point that orchestrates this pipeline is `lib/code_qualia.rb`.
 
 ## Testing Strategy
 

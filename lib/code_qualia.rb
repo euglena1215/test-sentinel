@@ -2,22 +2,22 @@
 
 require 'json'
 require 'yaml'
-require_relative 'test_sentinel/coverage_analyzer'
-require_relative 'test_sentinel/complexity_analyzer'
-require_relative 'test_sentinel/git_analyzer'
-require_relative 'test_sentinel/score_calculator'
-require_relative 'test_sentinel/config'
-require_relative 'test_sentinel/config_installer'
-require_relative 'test_sentinel/cli'
-require_relative 'test_sentinel/logger'
+require_relative 'code_qualia/coverage_analyzer'
+require_relative 'code_qualia/complexity_analyzer'
+require_relative 'code_qualia/git_analyzer'
+require_relative 'code_qualia/score_calculator'
+require_relative 'code_qualia/config'
+require_relative 'code_qualia/config_installer'
+require_relative 'code_qualia/cli'
+require_relative 'code_qualia/logger'
 
-module TestSentinel
+module CodeQualia
   class Error < StandardError; end
   
-  DEFAULT_CONFIG_FILE = 'sentinel.yml'
+  DEFAULT_CONFIG_FILE = 'qualia.yml'
 
   class << self
-    def analyze(config_path = './sentinel.yml', verbose: false)
+    def analyze(config_path = './qualia.yml', verbose: false)
       Logger.verbose = verbose
       Logger.log_step('Analysis')
 

@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'test_sentinel'
+require 'code_qualia'
 
-RSpec.describe TestSentinel::ConfigHelper do
+RSpec.describe CodeQualia::ConfigHelper do
   describe '.get_target_patterns' do
     context 'with default configuration' do
       before do
-        allow(File).to receive(:exist?).with('sentinel.yml').and_return(false)
+        allow(File).to receive(:exist?).with('qualia.yml').and_return(false)
       end
 
       it 'returns expanded glob patterns for target files' do
@@ -25,7 +25,7 @@ RSpec.describe TestSentinel::ConfigHelper do
 
     context 'with brace patterns in configuration' do
       let(:config) do
-        instance_double(TestSentinel::Config,
+        instance_double(CodeQualia::Config,
                         directory_weights: [
                           { 'path' => 'app/{models,controllers}/**/*.rb', 'weight' => 1.0 }
                         ])
@@ -44,7 +44,7 @@ RSpec.describe TestSentinel::ConfigHelper do
 
     context 'with directory patterns' do
       let(:config) do
-        instance_double(TestSentinel::Config,
+        instance_double(CodeQualia::Config,
                         directory_weights: [
                           { 'path' => 'lib/', 'weight' => 1.0 },
                           { 'path' => 'app', 'weight' => 1.0 }
@@ -98,7 +98,7 @@ RSpec.describe TestSentinel::ConfigHelper do
 
   describe '.normalize_file_path' do
     let(:config) do
-      instance_double(TestSentinel::Config,
+      instance_double(CodeQualia::Config,
                       directory_weights: [
                         { 'path' => 'app/**/*.rb', 'weight' => 1.0 },
                         { 'path' => 'lib/**/*.rb', 'weight' => 1.0 }
@@ -107,19 +107,23 @@ RSpec.describe TestSentinel::ConfigHelper do
 
     before do
       allow(described_class).to receive(:load_config).and_return(config)
-      allow(TestSentinel::PatternExpander).to receive(:extract_base_directories)
+      allow(CodeQualia::PatternExpander).to receive(:extract_base_directories)
         .with(['app/**/*.rb', 'lib/**/*.rb'])
         .and_return(['app/', 'lib/'])
     end
 
     context 'with absolute paths containing base directories' do
-      it 'normalizes absolute paths to relative paths from base directory' do
-        result = described_class.normalize_file_path('/full/path/to/project/app/models/user.rb')
+      it 'normalizes absolute paths to relative paths from current working directory' do
+        current_dir = Dir.pwd
+        absolute_path = File.join(current_dir, 'app/models/user.rb')
+        result = described_class.normalize_file_path(absolute_path)
         expect(result).to eq('app/models/user.rb')
       end
 
       it 'handles lib directory paths' do
-        result = described_class.normalize_file_path('/project/root/lib/my_gem/version.rb')
+        current_dir = Dir.pwd
+        absolute_path = File.join(current_dir, 'lib/my_gem/version.rb')
+        result = described_class.normalize_file_path(absolute_path)
         expect(result).to eq('lib/my_gem/version.rb')
       end
     end
@@ -143,52 +147,60 @@ RSpec.describe TestSentinel::ConfigHelper do
         expect(result).to eq(unmatched_path)
       end
     end
+
+    context 'with absolute paths not starting with current working directory' do
+      it 'returns the absolute path as-is' do
+        foreign_path = '/some/other/path/app/models/user.rb'
+        result = described_class.normalize_file_path(foreign_path)
+        expect(result).to eq(foreign_path)
+      end
+    end
   end
 
   describe '.load_config' do
-    context 'when sentinel.yml exists' do
-      let(:config_instance) { TestSentinel::Config.new }
+    context 'when qualia.yml exists' do
+      let(:config_instance) { CodeQualia::Config.new }
 
       before do
-        allow(File).to receive(:exist?).with('sentinel.yml').and_return(true)
-        allow(TestSentinel::Config).to receive(:load).with('sentinel.yml').and_return(config_instance)
+        allow(File).to receive(:exist?).with('qualia.yml').and_return(true)
+        allow(CodeQualia::Config).to receive(:load).with('qualia.yml').and_return(config_instance)
       end
 
       it 'loads configuration from the default config file' do
         result = described_class.load_config
         expect(result).to eq(config_instance)
-        expect(TestSentinel::Config).to have_received(:load).with('sentinel.yml')
+        expect(CodeQualia::Config).to have_received(:load).with('qualia.yml')
       end
 
-      it 'calls Config.load with sentinel.yml path' do
-        expect(TestSentinel::Config).to receive(:load).with('sentinel.yml').and_return(config_instance)
+      it 'calls Config.load with qualia.yml path' do
+        expect(CodeQualia::Config).to receive(:load).with('qualia.yml').and_return(config_instance)
         described_class.load_config
       end
     end
 
-    context 'when sentinel.yml does not exist' do
-      let(:default_config) { TestSentinel::Config.new }
+    context 'when qualia.yml does not exist' do
+      let(:default_config) { CodeQualia::Config.new }
 
       before do
-        allow(File).to receive(:exist?).with('sentinel.yml').and_return(false)
-        allow(TestSentinel::Config).to receive(:new).and_return(default_config)
+        allow(File).to receive(:exist?).with('qualia.yml').and_return(false)
+        allow(CodeQualia::Config).to receive(:new).and_return(default_config)
       end
 
       it 'returns a new Config instance with default values' do
         result = described_class.load_config
         expect(result).to eq(default_config)
-        expect(TestSentinel::Config).to have_received(:new)
+        expect(CodeQualia::Config).to have_received(:new)
       end
 
       it 'calls Config.new for default configuration' do
-        expect(TestSentinel::Config).to receive(:new).and_return(default_config)
+        expect(CodeQualia::Config).to receive(:new).and_return(default_config)
         described_class.load_config
       end
     end
 
     context 'with default configuration structure' do
       before do
-        allow(File).to receive(:exist?).with('sentinel.yml').and_return(false)
+        allow(File).to receive(:exist?).with('qualia.yml').and_return(false)
       end
 
       it 'provides directory_weights in the expected structure' do
@@ -203,7 +215,7 @@ RSpec.describe TestSentinel::ConfigHelper do
   describe 'integration behavior' do
     context 'when methods work together' do
       before do
-        allow(File).to receive(:exist?).with('sentinel.yml').and_return(false)
+        allow(File).to receive(:exist?).with('qualia.yml').and_return(false)
       end
 
       it 'demonstrates the complete workflow from config to file filtering' do

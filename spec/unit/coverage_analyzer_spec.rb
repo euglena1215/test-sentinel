@@ -1,21 +1,21 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'test_sentinel/coverage_analyzer'
+require 'code_qualia/coverage_analyzer'
 
-RSpec.describe TestSentinel::CoverageAnalyzer do
+RSpec.describe CodeQualia::CoverageAnalyzer do
   describe '#parse_coverage_data' do
     subject(:analyzer) { described_class.new }
     
     # Mock config for path normalization only
     before do
-      test_config = instance_double(TestSentinel::Config,
+      test_config = instance_double(CodeQualia::Config,
         directory_weights: [
           { 'path' => 'app/**/*.rb', 'weight' => 1.0 },
           { 'path' => 'lib/**/*.rb', 'weight' => 1.0 }
         ]
       )
-      allow(TestSentinel::ConfigHelper).to receive(:load_config).and_return(test_config)
+      allow(CodeQualia::ConfigHelper).to receive(:load_config).and_return(test_config)
     end
 
     context 'with valid coverage data for app/ files' do
@@ -31,33 +31,33 @@ RSpec.describe TestSentinel::CoverageAnalyzer do
       it 'calculates coverage rates correctly' do
         result = analyzer.send(:parse_coverage_data, coverage_data)
 
-        expect(result).to have_key('app/models/user.rb')
-        expect(result['app/models/user.rb'][:coverage_rate]).to eq(0.5) # 3/6 lines covered (excluding nils: 1,1,0,1,0,0)
-        expect(result['app/models/user.rb'][:covered_lines]).to eq(3)
-        expect(result['app/models/user.rb'][:total_lines]).to eq(6)
+        expect(result).to have_key('/full/path/to/app/models/user.rb')
+        expect(result['/full/path/to/app/models/user.rb'][:coverage_rate]).to eq(0.5) # 3/6 lines covered (excluding nils: 1,1,0,1,0,0)
+        expect(result['/full/path/to/app/models/user.rb'][:covered_lines]).to eq(3)
+        expect(result['/full/path/to/app/models/user.rb'][:total_lines]).to eq(6)
       end
 
       it 'handles array format coverage data' do
         result = analyzer.send(:parse_coverage_data, coverage_data)
 
-        expect(result).to have_key('app/services/payment.rb')
-        expect(result['app/services/payment.rb'][:coverage_rate]).to eq(0.5) # 2/4 lines covered
-        expect(result['app/services/payment.rb'][:covered_lines]).to eq(2)
-        expect(result['app/services/payment.rb'][:total_lines]).to eq(4)
+        expect(result).to have_key('/full/path/to/app/services/payment.rb')
+        expect(result['/full/path/to/app/services/payment.rb'][:coverage_rate]).to eq(0.5) # 2/4 lines covered
+        expect(result['/full/path/to/app/services/payment.rb'][:covered_lines]).to eq(2)
+        expect(result['/full/path/to/app/services/payment.rb'][:total_lines]).to eq(4)
       end
 
       it 'stores line coverage data' do
         result = analyzer.send(:parse_coverage_data, coverage_data)
 
-        expect(result['app/models/user.rb'][:line_coverage]).to eq([1, 1, 0, nil, 1, 0, 0])
-        expect(result['app/services/payment.rb'][:line_coverage]).to eq([1, 0, 1, nil, 0])
+        expect(result['/full/path/to/app/models/user.rb'][:line_coverage]).to eq([1, 1, 0, nil, 1, 0, 0])
+        expect(result['/full/path/to/app/services/payment.rb'][:line_coverage]).to eq([1, 0, 1, nil, 0])
       end
     end
 
     context 'with valid coverage data for lib/ files' do
       let(:coverage_data) do
         {
-          '/full/path/to/lib/test_sentinel/analyzer.rb' => {
+          '/full/path/to/lib/code_qualia/analyzer.rb' => {
             'lines' => [1, 1, 0, 0, nil, 1]
           }
         }
@@ -66,10 +66,10 @@ RSpec.describe TestSentinel::CoverageAnalyzer do
       it 'processes lib/ files correctly' do
         result = analyzer.send(:parse_coverage_data, coverage_data)
 
-        expect(result).to have_key('lib/test_sentinel/analyzer.rb')
-        expect(result['lib/test_sentinel/analyzer.rb'][:coverage_rate]).to eq(0.6) # 3/5 lines covered
-        expect(result['lib/test_sentinel/analyzer.rb'][:covered_lines]).to eq(3)
-        expect(result['lib/test_sentinel/analyzer.rb'][:total_lines]).to eq(5)
+        expect(result).to have_key('/full/path/to/lib/code_qualia/analyzer.rb')
+        expect(result['/full/path/to/lib/code_qualia/analyzer.rb'][:coverage_rate]).to eq(0.6) # 3/5 lines covered
+        expect(result['/full/path/to/lib/code_qualia/analyzer.rb'][:covered_lines]).to eq(3)
+        expect(result['/full/path/to/lib/code_qualia/analyzer.rb'][:total_lines]).to eq(5)
       end
     end
 
@@ -85,8 +85,8 @@ RSpec.describe TestSentinel::CoverageAnalyzer do
       it 'only processes app/ and lib/ files' do
         result = analyzer.send(:parse_coverage_data, coverage_data)
 
-        expect(result.keys).to contain_exactly('app/models/user.rb', 'lib/analyzer.rb')
-        expect(result).not_to have_key('config/application.rb')
+        expect(result.keys).to contain_exactly('/full/path/to/app/models/user.rb', '/full/path/to/lib/analyzer.rb')
+        expect(result).not_to have_key('/full/path/to/config/application.rb')
       end
     end
 
@@ -103,10 +103,10 @@ RSpec.describe TestSentinel::CoverageAnalyzer do
       it 'handles empty coverage data' do
         result = analyzer.send(:parse_coverage_data, coverage_data)
 
-        expect(result).not_to have_key('app/models/empty.rb')
-        expect(result).not_to have_key('app/models/nil_coverage.rb')
-        expect(result).not_to have_key('app/models/only_nils.rb')
-        expect(result).to have_key('app/models/valid.rb')
+        expect(result).not_to have_key('/full/path/to/app/models/empty.rb')
+        expect(result).not_to have_key('/full/path/to/app/models/nil_coverage.rb')
+        expect(result).not_to have_key('/full/path/to/app/models/only_nils.rb')
+        expect(result).to have_key('/full/path/to/app/models/valid.rb')
       end
     end
 
@@ -120,9 +120,9 @@ RSpec.describe TestSentinel::CoverageAnalyzer do
       it 'calculates zero coverage correctly' do
         result = analyzer.send(:parse_coverage_data, coverage_data)
 
-        expect(result['app/models/uncovered.rb'][:coverage_rate]).to eq(0.0)
-        expect(result['app/models/uncovered.rb'][:covered_lines]).to eq(0)
-        expect(result['app/models/uncovered.rb'][:total_lines]).to eq(4)
+        expect(result['/full/path/to/app/models/uncovered.rb'][:coverage_rate]).to eq(0.0)
+        expect(result['/full/path/to/app/models/uncovered.rb'][:covered_lines]).to eq(0)
+        expect(result['/full/path/to/app/models/uncovered.rb'][:total_lines]).to eq(4)
       end
     end
 
@@ -136,9 +136,9 @@ RSpec.describe TestSentinel::CoverageAnalyzer do
       it 'calculates full coverage correctly' do
         result = analyzer.send(:parse_coverage_data, coverage_data)
 
-        expect(result['app/models/covered.rb'][:coverage_rate]).to eq(1.0)
-        expect(result['app/models/covered.rb'][:covered_lines]).to eq(4)
-        expect(result['app/models/covered.rb'][:total_lines]).to eq(4)
+        expect(result['/full/path/to/app/models/covered.rb'][:coverage_rate]).to eq(1.0)
+        expect(result['/full/path/to/app/models/covered.rb'][:covered_lines]).to eq(4)
+        expect(result['/full/path/to/app/models/covered.rb'][:total_lines]).to eq(4)
       end
     end
   end

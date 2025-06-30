@@ -3,7 +3,7 @@
 require 'set'
 require 'pathname'
 
-module TestSentinel
+module CodeQualia
   class PatternExpander
     def self.expand_brace_patterns(pattern)
       new.expand_brace_patterns(pattern)

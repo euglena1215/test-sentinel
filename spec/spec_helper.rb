@@ -7,7 +7,7 @@ SimpleCov.start do
 end
 
 require 'bundler/setup'
-require 'test_sentinel'
+require 'code_qualia'
 require 'rspec'
 require 'yaml'
 require 'fileutils'

@@ -49,7 +49,7 @@ RSpec.describe 'Smoke Test Integration' do
 
       after do
         # Clean up generated files
-        generated_json_path = File.join(project[:dir], 'test_sentinel_analysis.json')
+        generated_json_path = File.join(project[:dir], 'code_qualia_analysis.json')
         File.delete(generated_json_path) if File.exist?(generated_json_path)
       end
 
@@ -57,10 +57,10 @@ RSpec.describe 'Smoke Test Integration' do
         it "produces expected #{format} format output" do
           command_output = if project[:is_rails]
             # For Rails projects, run from within the project directory
-            `cd #{project[:dir]} && bundle exec test-sentinel generate --format #{format} --top-n 10 2>/dev/null`
+            `cd #{project[:dir]} && bundle exec code-qualia generate --format #{format} --top-n 10 2>/dev/null`
           else
             # For non-Rails projects, run from project root with --directory option
-            `bundle exec test-sentinel generate --format #{format} --directory #{project[:dir]} --top-n 10 2>/dev/null`
+            `bundle exec code-qualia generate --format #{format} --directory #{project[:dir]} --top-n 10 2>/dev/null`
           end
 
           expected_file_extension = format == 'json' ? 'json' : (format == 'csv' ? 'csv' : 'txt')

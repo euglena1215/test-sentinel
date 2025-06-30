@@ -2,7 +2,7 @@
 
 require_relative 'config_helper'
 
-module TestSentinel
+module CodeQualia
   class ScoreCalculator
     def initialize(config)
       @config = config
