@@ -59,25 +59,28 @@ bundle exec code-qualia generate --format table
 ### Sample Output
 
 ```
-🔍 Analyzing codebase...
-
 📊 Top 3 methods requiring test coverage:
 
-1. app/models/user.rb:19
+1. app/models/user.rb:21
    Method: can_access_feature?
-   Priority Score: 9.55
+   Priority Score: 10.15
    Coverage: 50.0%
    Complexity: 7
    Git Commits: 0
 
-2. app/services/payment_service.rb:6
-   Method: calculate_fee
-   Priority Score: 7.45
-   Coverage: 56.8%
+2. packs/users/app/models/users/user_profile.rb:5
+   Method: display_name
+   Priority Score: 7.7
+   Coverage: 0.0%
    Complexity: 5
    Git Commits: 0
 
-📄 Detailed analysis saved to code_qualia_analysis.json
+3. app/models/user.rb:35
+   Method: calculate_discount
+   Priority Score: 7.15
+   Coverage: 50.0%
+   Complexity: 4
+   Git Commits: 0
 ```
 
 ## ⚙️ Configuration
@@ -155,11 +158,18 @@ Code Qualia supports multiple output formats for flexibility:
 ```
 📊 Top 3 methods requiring test coverage:
 
-1. app/models/user.rb:19
+1. app/models/user.rb:21
    Method: can_access_feature?
-   Priority Score: 9.55
+   Priority Score: 10.15
    Coverage: 50.0%
    Complexity: 7
+   Git Commits: 0
+
+2. packs/users/app/models/users/user_profile.rb:5
+   Method: display_name
+   Priority Score: 7.7
+   Coverage: 0.0%
+   Complexity: 5
    Git Commits: 0
 ```
 
@@ -168,13 +178,25 @@ Code Qualia supports multiple output formats for flexibility:
 [
   {
     "file_path": "app/models/user.rb",
-    "class_name": "User", 
+    "class_name": "User",
     "method_name": "can_access_feature?",
-    "line_number": 19,
-    "score": 9.55,
+    "line_number": 21,
+    "score": 10.15,
     "details": {
       "coverage": 0.5,
       "complexity": 7,
+      "git_commits": 0
+    }
+  },
+  {
+    "file_path": "packs/users/app/models/users/user_profile.rb",
+    "class_name": "UserProfile",
+    "method_name": "display_name",
+    "line_number": 5,
+    "score": 7.7,
+    "details": {
+      "coverage": 0.0,
+      "complexity": 5,
       "git_commits": 0
     }
   }
@@ -184,16 +206,18 @@ Code Qualia supports multiple output formats for flexibility:
 ### CSV Format
 ```csv
 file_path,method_name,line_number,score,coverage,complexity,git_commits
-app/models/user.rb,can_access_feature?,19,9.55,50.0,7,0
+app/models/user.rb,can_access_feature?,21,10.15,50.0,7,0
+packs/users/app/models/users/user_profile.rb,display_name,5,7.7,0.0,5,0
 ```
 
 ### Table Format
 ```
-+-------------------+----------------------+------+-------+----------+------------+----------+
-| File              | Method               | Line | Score | Coverage | Complexity | Commits  |
-+-------------------+----------------------+------+-------+----------+------------+----------+
-| app/models/user.rb| can_access_feature?  |   19 |  9.55 |    50.0% |          7 |        0 |
-+-------------------+----------------------+------+-------+----------+------------+----------+
++----------------------+---------------------+------+-------+----------+------------+----------+
+| File                 | Method              | Line | Score | Coverage | Complexity | Commits  |
++----------------------+---------------------+------+-------+----------+------------+----------+
+| app/models/user.rb   | can_access_feature? |   21 | 10.15 |    50.0% |          7 |        0 |
+| packs/users/app/mod… | display_name        |    5 |  7.70 |     0.0% |          5 |        0 |
++----------------------+---------------------+------+-------+----------+------------+----------+
 ```
 
 All formats can be redirected to files using standard Unix redirection:
