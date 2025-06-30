@@ -358,5 +358,136 @@ RSpec.describe CodeQualia::ComplexityAnalyzer do
         )
       end
     end
+
+    context 'with malformed JSON output' do
+      let(:malformed_output) do
+        <<~OUTPUT
+          Some text before
+          {
+            "files": [
+              {
+                "path": "/full/path/to/app/models/user.rb",
+                "offenses": [
+                  {
+                    "severity": "convention",
+                    "message": "Cyclomatic complexity for `test_method` is too high. [7/6]",
+                    "cop_name": "Metrics/CyclomaticComplexity",
+                    "location": {
+                      "start_line": 10
+                    }
+                  }
+                ]
+              }
+            // Missing closing brace
+        OUTPUT
+      end
+
+      it 'handles JSON parsing errors gracefully' do
+        result = analyzer.send(:parse_rubocop_output, malformed_output)
+        expect(result).to eq({})
+      end
+    end
+
+    context 'when relative path is nil or empty' do
+      let(:rubocop_output) do
+        <<~JSON
+          {
+            "files": [
+              {
+                "path": "/some/unrelated/path/file.rb",
+                "offenses": [
+                  {
+                    "severity": "convention",
+                    "message": "Cyclomatic complexity for `test_method` is too high. [7/6]",
+                    "cop_name": "Metrics/CyclomaticComplexity",
+                    "location": {
+                      "start_line": 10
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        JSON
+      end
+
+      before do
+        allow(CodeQualia::ConfigHelper).to receive(:normalize_file_path).and_return(nil)
+      end
+
+      it 'skips files with nil relative path' do
+        result = analyzer.send(:parse_rubocop_output, rubocop_output)
+        expect(result).to eq({})
+      end
+    end
+    
+    context 'with invalid method info extraction' do
+      let(:rubocop_output) do
+        <<~JSON
+          {
+            "files": [
+              {
+                "path": "/full/path/to/app/models/user.rb",
+                "offenses": [
+                  {
+                    "severity": "convention",
+                    "message": "Invalid message format without proper complexity info",
+                    "cop_name": "Metrics/CyclomaticComplexity",
+                    "location": {
+                      "start_line": 10
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        JSON
+      end
+
+      it 'skips offenses with invalid method info' do
+        result = analyzer.send(:parse_rubocop_output, rubocop_output)
+        expect(result).to eq({})
+      end
+    end
+  end
+
+  describe '#extract_method_info' do
+    subject(:analyzer) { described_class.new }
+
+    context 'with valid complexity message' do
+      it 'extracts method name and complexity correctly' do
+        message = "Cyclomatic complexity for `calculate_fee` is too high. [12/6]"
+        result = analyzer.send(:extract_method_info, message)
+        
+        expect(result).to eq({
+          method_name: 'calculate_fee',
+          complexity: 12
+        })
+      end
+
+      it 'handles different complexity values' do
+        message = "Cyclomatic complexity for `process_data` is too high. [25/10]"
+        result = analyzer.send(:extract_method_info, message)
+        
+        expect(result).to eq({
+          method_name: 'process_data',
+          complexity: 25
+        })
+      end
+    end
+
+    context 'with invalid message format' do
+      it 'returns nil for non-matching message' do
+        message = "Some other rubocop message"
+        result = analyzer.send(:extract_method_info, message)
+        expect(result).to be_nil
+      end
+
+      it 'returns nil for incomplete complexity message' do
+        message = "Cyclomatic complexity for method is too high"
+        result = analyzer.send(:extract_method_info, message)
+        expect(result).to be_nil
+      end
+    end
   end
 end
