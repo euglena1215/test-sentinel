@@ -164,7 +164,7 @@ module CodeQualia
       require 'io/console'
 
       # Calculate column widths
-      max_file = [results.map { |r| r[:file_path].length }.max, 20].min
+      max_file = results.map { |r| r[:file_path].length }.max || 20
       max_method = [results.map { |r| r[:method_name].length }.max, 20].min
 
       # Header
@@ -174,7 +174,7 @@ module CodeQualia
 
       # Data rows
       results.each do |method|
-        file_name = method[:file_path].length > max_file ? method[:file_path][0...max_file - 1] + '…' : method[:file_path]
+        file_name = method[:file_path]
         method_name = method[:method_name].length > max_method ? method[:method_name][0...max_method - 1] + '…' : method[:method_name]
         coverage_percent = (method[:details][:coverage] * 100).round(1)
 
