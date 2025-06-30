@@ -12,7 +12,7 @@ RSpec.describe CodeQualia::ComplexityAnalyzer do
       before do
         # Mock config to return specific patterns for testing
         test_config = instance_double(CodeQualia::Config,
-          directory_weights: [
+          architectural_weights: [
             { 'path' => 'app/**/*.rb', 'weight' => 1.0 },
             { 'path' => 'lib/**/*.rb', 'weight' => 1.0 }
           ]
@@ -43,7 +43,7 @@ RSpec.describe CodeQualia::ComplexityAnalyzer do
     context 'when only some directories exist' do
       before do
         test_config = instance_double(CodeQualia::Config,
-          directory_weights: [
+          architectural_weights: [
             { 'path' => 'app/**/*.rb', 'weight' => 1.0 },
             { 'path' => 'lib/**/*.rb', 'weight' => 1.0 }
           ]
@@ -73,7 +73,7 @@ RSpec.describe CodeQualia::ComplexityAnalyzer do
     context 'when no directories exist' do
       before do
         test_config = instance_double(CodeQualia::Config,
-          directory_weights: [
+          architectural_weights: [
             { 'path' => 'app/**/*.rb', 'weight' => 1.0 },
             { 'path' => 'lib/**/*.rb', 'weight' => 1.0 }
           ]
@@ -98,7 +98,7 @@ RSpec.describe CodeQualia::ComplexityAnalyzer do
     context 'when bundle exec is not available' do
       before do
         test_config = instance_double(CodeQualia::Config,
-          directory_weights: [
+          architectural_weights: [
             { 'path' => 'app/**/*.rb', 'weight' => 1.0 }
           ]
         )
@@ -131,7 +131,7 @@ RSpec.describe CodeQualia::ComplexityAnalyzer do
 
       before do
         test_config = instance_double(CodeQualia::Config,
-          directory_weights: [
+          architectural_weights: [
             { 'path' => 'app/**/*.rb', 'weight' => 1.0 }
           ]
         )
@@ -160,7 +160,7 @@ RSpec.describe CodeQualia::ComplexityAnalyzer do
     # Mock config for path normalization only
     before do
       test_config = instance_double(CodeQualia::Config,
-        directory_weights: [
+        architectural_weights: [
           { 'path' => 'app/**/*.rb', 'weight' => 1.0 },
           { 'path' => 'lib/**/*.rb', 'weight' => 1.0 }
         ]

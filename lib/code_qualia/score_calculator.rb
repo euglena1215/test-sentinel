@@ -82,29 +82,43 @@ module CodeQualia
     end
 
     def calculate_method_score(file_path, method_data, coverage_data, git_data)
+      quality_score = calculate_quality_score(file_path, method_data, coverage_data)
+      importance_score = calculate_importance_score(file_path, git_data)
+      
+      final_score = quality_score * importance_score
+      final_score.round(2)
+    end
+
+    def calculate_quality_score(file_path, method_data, coverage_data)
       score = 0.0
 
-      if @config.score_weights['coverage'] > 0
+      if @config.quality_weights['test_coverage'] > 0
         coverage_factor = calculate_coverage_factor(file_path, method_data, coverage_data)
-        score += @config.score_weights['coverage'] * coverage_factor
+        score += @config.quality_weights['test_coverage'] * coverage_factor
       end
 
-      if @config.score_weights['complexity'] > 0
+      if @config.quality_weights['cyclomatic_complexity'] > 0
         complexity_factor = method_data[:complexity] || 1
-        score += @config.score_weights['complexity'] * complexity_factor
+        score += @config.quality_weights['cyclomatic_complexity'] * complexity_factor
       end
 
-      if @config.score_weights['git_history'] > 0
+      score
+    end
+
+    def calculate_importance_score(file_path, git_data)
+      score = 0.0
+
+      if @config.importance_weights['change_frequency'] > 0
         git_factor = git_data[file_path] || 0
-        score += @config.score_weights['git_history'] * git_factor
+        score += @config.importance_weights['change_frequency'] * git_factor
       end
 
-      if @config.score_weights['directory'] > 0
-        directory_factor = @config.directory_weight_for(file_path)
-        score += @config.score_weights['directory'] * directory_factor
+      if @config.importance_weights['architectural_importance'] > 0
+        architectural_factor = @config.architectural_weight_for(file_path)
+        score += @config.importance_weights['architectural_importance'] * architectural_factor
       end
 
-      score.round(2)
+      score
     end
 
     def calculate_coverage_factor(file_path, _method_data, coverage_data)

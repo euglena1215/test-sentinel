@@ -63,23 +63,23 @@ bundle exec code-qualia generate --format table
 
 1. app/models/user.rb:21
    Method: can_access_feature?
-   Priority Score: 10.15
+   Priority Score: 18.6
    Coverage: 50.0%
    Complexity: 7
    Git Commits: 0
 
-2. packs/users/app/models/users/user_profile.rb:5
-   Method: display_name
-   Priority Score: 7.7
-   Coverage: 0.0%
-   Complexity: 5
-   Git Commits: 0
-
-3. app/models/user.rb:35
+2. app/models/user.rb:35
    Method: calculate_discount
-   Priority Score: 7.15
+   Priority Score: 11.4
    Coverage: 50.0%
    Complexity: 4
+   Git Commits: 0
+
+3. packs/users/app/models/users/user_profile.rb:5
+   Method: display_name
+   Priority Score: 7.8
+   Coverage: 0.0%
+   Complexity: 5
    Git Commits: 0
 ```
 
@@ -88,21 +88,26 @@ bundle exec code-qualia generate --format table
 Create a `qualia.yml` file in your project root:
 
 ```yaml
-# Weights for priority score calculation
-score_weights:
-  coverage: 1.5      # Weight for coverage factor (higher = prioritize low coverage)
-  complexity: 1.0    # Weight for complexity factor
-  git_history: 0.8   # Weight for git activity
-  directory: 1.2     # Weight for directory importance
+# Quality indicators (code issues that need fixing)
+quality_weights:
+  test_coverage: 1.5          # Weight for test coverage (lower coverage = higher priority)
+  cyclomatic_complexity: 1.0  # Weight for cyclomatic complexity (higher complexity = higher priority)
 
-# Directory-specific importance weights  
-directory_weights:
-  - path: "app/models/"
-    weight: 1.5      # Models are critical
-  - path: "app/services/"
-    weight: 1.5      # Services contain business logic
-  - path: "app/controllers/"
-    weight: 1.0      # Standard weight
+# Importance indicators (how critical the code is)
+importance_weights:
+  change_frequency: 0.8         # Weight for git change frequency (more changes = higher importance)
+  architectural_importance: 1.2 # Weight for architectural importance (critical paths = higher importance)
+
+# Path-based architectural importance weights
+architectural_weights:
+  - path: "app/models/**/*.rb"
+    weight: 2.0      # Models are critical for business logic
+  - path: "app/services/**/*.rb"
+    weight: 1.8      # Services contain complex business logic
+  - path: "app/controllers/**/*.rb"
+    weight: 1.5      # Controllers handle user interactions
+  - path: "lib/**/*.rb"
+    weight: 1.0      # Library code standard weight
 
 # Files to exclude from analysis
 exclude:
@@ -123,15 +128,23 @@ git_history_days: 90
 
 ## 🏗️ How It Works
 
-Code Qualia calculates a priority score for each method using:
+Code Qualia calculates a priority score for each method using a multiplicative approach that separates quality issues from code importance:
 
-**Score = (W_cov × CoverageFactor) + (W_comp × ComplexityFactor) + (W_git × GitFactor) + (W_dir × DirectoryFactor)**
+**FinalScore = QualityScore × ImportanceScore**
 
 Where:
-- **CoverageFactor**: `(1.0 - coverage_rate)` - lower coverage = higher priority
-- **ComplexityFactor**: Cyclomatic complexity from RuboCop
-- **GitFactor**: Number of commits in specified time period
-- **DirectoryFactor**: Weight based on file location
+- **QualityScore** = `(W_test_coverage × TestCoverageFactor) + (W_cyclomatic_complexity × ComplexityFactor)`
+- **ImportanceScore** = `(W_change_frequency × ChangeFrequencyFactor) + (W_architectural_importance × ArchitecturalFactor)`
+
+**Quality Indicators** (code issues that need fixing):
+- **TestCoverageFactor**: `(1.0 - coverage_rate)` - lower coverage = higher quality risk
+- **ComplexityFactor**: Cyclomatic complexity from RuboCop - higher complexity = higher quality risk
+
+**Importance Indicators** (how critical the code is):
+- **ChangeFrequencyFactor**: Number of commits in specified time period - more changes = higher importance
+- **ArchitecturalFactor**: Weight based on file location (configurable) - critical paths = higher importance
+
+This approach ensures that both quality issues AND importance must be present for a method to rank highly, providing more logical prioritization.
 
 
 ## 🧪 Development

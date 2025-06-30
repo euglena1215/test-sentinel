@@ -1,10 +1,12 @@
-score_weights:
-  coverage: 1.5
-  complexity: 1.0
-  git_history: 0.8
-  directory: 1.2
+quality_weights:
+  test_coverage: 1.5
+  cyclomatic_complexity: 1.0
 
-directory_weights:
+importance_weights:
+  change_frequency: 0.8
+  architectural_importance: 1.2
+
+architectural_weights:
   - path: '{app,packs/*}/models/**/*.rb'
     weight: 2.0
   - path: '{app,packs/*}/controllers/**/*.rb'

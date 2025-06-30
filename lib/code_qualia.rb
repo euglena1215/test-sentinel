@@ -24,7 +24,7 @@ module CodeQualia
       config = Config.load(config_path)
       Logger.log('Configuration loaded')
 
-      coverage_data = if config.score_weights['coverage'] > 0
+      coverage_data = if config.quality_weights['test_coverage'] > 0
                         Logger.log_step('Coverage analysis')
                         result = CoverageAnalyzer.analyze
                         Logger.log_result('Coverage analysis', result.size)
@@ -34,7 +34,7 @@ module CodeQualia
                         {}
                       end
 
-      complexity_data = if config.score_weights['complexity'] > 0
+      complexity_data = if config.quality_weights['cyclomatic_complexity'] > 0
                           Logger.log_step('Complexity analysis')
                           result = ComplexityAnalyzer.analyze
                           Logger.log_result('Complexity analysis', result.values.sum(&:size))
@@ -44,7 +44,7 @@ module CodeQualia
                           {}
                         end
 
-      git_data = if config.score_weights['git_history'] > 0
+      git_data = if config.importance_weights['change_frequency'] > 0
                    Logger.log_step('Git history analysis')
                    result = GitAnalyzer.analyze(config.git_history_days)
                    Logger.log_result('Git history analysis', result.size)

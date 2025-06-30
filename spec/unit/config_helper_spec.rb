@@ -26,7 +26,7 @@ RSpec.describe CodeQualia::ConfigHelper do
     context 'with brace patterns in configuration' do
       let(:config) do
         instance_double(CodeQualia::Config,
-                        directory_weights: [
+                        architectural_weights: [
                           { 'path' => 'app/{models,controllers}/**/*.rb', 'weight' => 1.0 }
                         ])
       end
@@ -45,7 +45,7 @@ RSpec.describe CodeQualia::ConfigHelper do
     context 'with directory patterns' do
       let(:config) do
         instance_double(CodeQualia::Config,
-                        directory_weights: [
+                        architectural_weights: [
                           { 'path' => 'lib/', 'weight' => 1.0 },
                           { 'path' => 'app', 'weight' => 1.0 }
                         ])
@@ -99,7 +99,7 @@ RSpec.describe CodeQualia::ConfigHelper do
   describe '.normalize_file_path' do
     let(:config) do
       instance_double(CodeQualia::Config,
-                      directory_weights: [
+                      architectural_weights: [
                         { 'path' => 'app/**/*.rb', 'weight' => 1.0 },
                         { 'path' => 'lib/**/*.rb', 'weight' => 1.0 }
                       ])
@@ -203,11 +203,11 @@ RSpec.describe CodeQualia::ConfigHelper do
         allow(File).to receive(:exist?).with('qualia.yml').and_return(false)
       end
 
-      it 'provides directory_weights in the expected structure' do
+      it 'provides architectural_weights in the expected structure' do
         config = described_class.load_config
-        expect(config.directory_weights).to be_an(Array)
-        expect(config.directory_weights.first).to have_key('path')
-        expect(config.directory_weights.first).to have_key('weight')
+        expect(config.architectural_weights).to be_an(Array)
+        expect(config.architectural_weights.first).to have_key('path')
+        expect(config.architectural_weights.first).to have_key('weight')
       end
     end
   end

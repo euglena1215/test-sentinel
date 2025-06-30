@@ -32,7 +32,7 @@ module CodeQualia
     end
 
     def extract_directories_from_config(config)
-      patterns = config.directory_weights.map { |entry| entry['path'] }
+      patterns = config.architectural_weights.map { |entry| entry['path'] }
       directories = PatternExpander.extract_base_directories(patterns)
 
       # Ensure directories end with '/' and exist

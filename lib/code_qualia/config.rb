@@ -4,11 +4,12 @@ require_relative 'pattern_expander'
 
 module CodeQualia
   class Config
-    attr_reader :score_weights, :directory_weights, :exclude_patterns, :git_history_days
+    attr_reader :quality_weights, :importance_weights, :architectural_weights, :exclude_patterns, :git_history_days
 
     def initialize(data = {})
-      @score_weights = data['score_weights'] || default_score_weights
-      @directory_weights = expand_directory_weights(data['directory_weights'] || default_directory_weights)
+      @quality_weights = data['quality_weights'] || default_quality_weights
+      @importance_weights = data['importance_weights'] || default_importance_weights
+      @architectural_weights = expand_architectural_weights(data['architectural_weights'] || default_architectural_weights)
       @exclude_patterns = data['exclude'] || default_exclude_patterns
       @git_history_days = data['git_history_days'] || 90
     end
@@ -22,8 +23,8 @@ module CodeQualia
       raise Error, "Failed to load config file: #{e.message}"
     end
 
-    def directory_weight_for(file_path)
-      @directory_weights.each do |entry|
+    def architectural_weight_for(file_path)
+      @architectural_weights.each do |entry|
         return entry['weight'] if File.fnmatch(entry['path'], file_path, File::FNM_PATHNAME)
       end
       1.0
@@ -35,16 +36,21 @@ module CodeQualia
 
     private
 
-    def default_score_weights
+    def default_quality_weights
       {
-        'coverage' => 1.5,
-        'complexity' => 1.0,
-        'git_history' => 0.8,
-        'directory' => 1.2
+        'test_coverage' => 1.5,
+        'cyclomatic_complexity' => 1.0
       }
     end
 
-    def default_directory_weights
+    def default_importance_weights
+      {
+        'change_frequency' => 0.8,
+        'architectural_importance' => 1.2
+      }
+    end
+
+    def default_architectural_weights
       [
         { 'path' => '**/*.rb', 'weight' => 1.0 }
       ]
@@ -57,7 +63,7 @@ module CodeQualia
       ]
     end
 
-    def expand_directory_weights(weights)
+    def expand_architectural_weights(weights)
       expanded_weights = []
       weights.each do |entry|
         path = entry['path']

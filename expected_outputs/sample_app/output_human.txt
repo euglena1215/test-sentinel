@@ -2,70 +2,70 @@
 
 1. app/models/user.rb:21
    Method: can_access_feature?
-   Priority Score: 10.15
+   Priority Score: 18.6
    Coverage: 50.0%
    Complexity: 7
    Git Commits: 0
 
-2. packs/users/app/models/users/user_profile.rb:5
-   Method: display_name
-   Priority Score: 7.7
-   Coverage: 0.0%
-   Complexity: 5
-   Git Commits: 0
-
-3. app/models/user.rb:35
+2. app/models/user.rb:35
    Method: calculate_discount
-   Priority Score: 7.15
+   Priority Score: 11.4
    Coverage: 50.0%
    Complexity: 4
    Git Commits: 0
 
+3. packs/users/app/models/users/user_profile.rb:5
+   Method: display_name
+   Priority Score: 7.8
+   Coverage: 0.0%
+   Complexity: 5
+   Git Commits: 0
+
 4. app/services/payment_service.rb:8
    Method: calculate_fee
-   Priority Score: 6.8
+   Priority Score: 6.72
    Coverage: 60.0%
    Complexity: 5
    Git Commits: 0
 
 5. app/services/payment_service.rb:28
    Method: process_payment
-   Priority Score: 6.8
+   Priority Score: 6.72
    Coverage: 60.0%
    Complexity: 5
    Git Commits: 0
 
 6. app/controllers/users_controller.rb:6
    Method: index
-   Priority Score: 4.3
+   Priority Score: 4.5
    Coverage: 0.0%
    Complexity: 1
    Git Commits: 0
 
 7. app/controllers/users_controller.rb:16
    Method: show
-   Priority Score: 4.3
+   Priority Score: 4.5
    Coverage: 0.0%
    Complexity: 1
    Git Commits: 0
 
 8. app/controllers/users_controller.rb:23
    Method: create
-   Priority Score: 4.3
+   Priority Score: 4.5
    Coverage: 0.0%
    Complexity: 1
    Git Commits: 0
 
 9. app/controllers/users_controller.rb:34
    Method: update
-   Priority Score: 4.3
+   Priority Score: 4.5
    Coverage: 0.0%
    Complexity: 1
    Git Commits: 0
 
 10. app/controllers/users_controller.rb:45
    Method: set_user
-   Priority Score: 4.3
+   Priority Score: 4.5
    Coverage: 0.0%
    Complexity: 1
    Git Commits: 0

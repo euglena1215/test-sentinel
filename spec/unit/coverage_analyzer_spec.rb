@@ -10,7 +10,7 @@ RSpec.describe CodeQualia::CoverageAnalyzer do
     # Mock config for path normalization only
     before do
       test_config = instance_double(CodeQualia::Config,
-        directory_weights: [
+        architectural_weights: [
           { 'path' => 'app/**/*.rb', 'weight' => 1.0 },
           { 'path' => 'lib/**/*.rb', 'weight' => 1.0 }
         ]

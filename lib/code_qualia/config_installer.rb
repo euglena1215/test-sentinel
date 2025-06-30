@@ -78,13 +78,15 @@ module CodeQualia
 
     def rails_config
       <<~YAML
-        score_weights:
-          coverage: 1.5
-          complexity: 1.0
-          git_history: 0.8
-          directory: 1.2
+        quality_weights:
+          test_coverage: 1.5
+          cyclomatic_complexity: 1.0
 
-        directory_weights:
+        importance_weights:
+          change_frequency: 0.8
+          architectural_importance: 1.2
+
+        architectural_weights:
           - path: 'app/models/**/*.rb'
             weight: 2.0
           - path: 'app/controllers/**/*.rb'
@@ -112,13 +114,15 @@ module CodeQualia
 
     def gem_config
       <<~YAML
-        score_weights:
-          coverage: 1.5
-          complexity: 1.0
-          git_history: 0.8
-          directory: 1.2
+        quality_weights:
+          test_coverage: 1.5
+          cyclomatic_complexity: 1.0
 
-        directory_weights:
+        importance_weights:
+          change_frequency: 0.8
+          architectural_importance: 1.2
+
+        architectural_weights:
           - path: 'lib/**/*.rb'
             weight: 1.0
           - path: 'bin/**/*'
@@ -135,13 +139,15 @@ module CodeQualia
 
     def default_config
       <<~YAML
-        score_weights:
-          coverage: 1.5
-          complexity: 1.0
-          git_history: 0.8
-          directory: 1.2
+        quality_weights:
+          test_coverage: 1.5
+          cyclomatic_complexity: 1.0
 
-        directory_weights:
+        importance_weights:
+          change_frequency: 0.8
+          architectural_importance: 1.2
+
+        architectural_weights:
           - path: 'app/**/*.rb'
             weight: 1.0
           - path: 'lib/**/*.rb'

@@ -68,16 +68,24 @@ Code Qualia follows a 4-stage analysis pipeline orchestrated by `CodeQualia.anal
 4. **Score Calculation** (`ScoreCalculator`) - Combines all data sources using weighted formula to rank methods
 
 ### Scoring Algorithm
-The priority score uses this weighted formula:
+The priority score uses a multiplicative formula that separates quality indicators from importance indicators:
 ```
-Score = (W_cov × CoverageFactor) + (W_comp × ComplexityFactor) + (W_git × GitFactor) + (W_dir × DirectoryFactor)
+FinalScore = QualityScore × ImportanceScore
+
+QualityScore = (W_test_coverage × TestCoverageFactor) + (W_cyclomatic_complexity × ComplexityFactor)
+ImportanceScore = (W_change_frequency × ChangeFrequencyFactor) + (W_architectural_importance × ArchitecturalFactor)
 ```
 
 Where:
-- `CoverageFactor`: `(1.0 - coverage_rate)` - lower coverage = higher priority
-- `ComplexityFactor`: Cyclomatic complexity from RuboCop
-- `GitFactor`: Number of commits in specified time period  
-- `DirectoryFactor`: Weight based on file location (configurable)
+**Quality Indicators** (code issues that need fixing):
+- `TestCoverageFactor`: `(1.0 - coverage_rate)` - lower coverage = higher quality risk
+- `ComplexityFactor`: Cyclomatic complexity from RuboCop - higher complexity = higher quality risk
+
+**Importance Indicators** (how critical the code is):
+- `ChangeFrequencyFactor`: Number of commits in specified time period - more changes = higher importance
+- `ArchitecturalFactor`: Weight based on file location (configurable) - critical paths = higher importance
+
+This approach ensures that both quality issues AND importance must be present for a method to rank highly.
 
 ### Key Components
 
@@ -116,10 +124,28 @@ Custom `CodeQualia::Error` class provides structured error handling throughout t
 ## Configuration
 
 Code Qualia uses `qualia.yml` for configuration. Key sections:
-- `score_weights`: Controls relative importance of coverage, complexity, git history, and directory factors
-- `directory_weights`: Path-based multipliers for different code areas  
+- `quality_weights`: Controls weights for code quality indicators (test_coverage, cyclomatic_complexity)
+- `importance_weights`: Controls weights for code importance indicators (change_frequency, architectural_importance)
+- `architectural_weights`: Path-based multipliers for different code areas (formerly directory_weights)
 - `exclude`: File patterns to skip during analysis
 - `git_history_days`: Time window for git analysis (default: 90 days)
+
+Example configuration:
+```yaml
+quality_weights:
+  test_coverage: 1.5
+  cyclomatic_complexity: 1.0
+
+importance_weights:
+  change_frequency: 0.8
+  architectural_importance: 1.2
+
+architectural_weights:
+  - path: 'app/models/**/*.rb'
+    weight: 2.0
+  - path: 'app/controllers/**/*.rb'
+    weight: 1.5
+```
 
 ## Development Notes
 

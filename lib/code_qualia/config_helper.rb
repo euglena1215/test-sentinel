@@ -9,7 +9,7 @@ module CodeQualia
     class << self
       # Gets target file patterns from configuration and expands them to glob patterns.
       #
-      # This method reads the directory_weights configuration, expands any brace patterns
+      # This method reads the architectural_weights configuration, expands any brace patterns
       # (e.g., 'app/{models,controllers}/**/*.rb'), and converts directory patterns to
       # file patterns by appending '**/*.rb' when necessary.
       #
@@ -19,7 +19,7 @@ module CodeQualia
       #   # => ["app/models/**/*.rb", "app/controllers/**/*.rb", "lib/**/*.rb"]
       def get_target_patterns
         config = load_config
-        patterns = config.directory_weights.map { |entry| entry['path'] }
+        patterns = config.architectural_weights.map { |entry| entry['path'] }
 
         # Expand brace patterns and convert to file patterns if they're directory patterns
         expanded_patterns = []
@@ -106,7 +106,7 @@ module CodeQualia
       # @return [CodeQualia::Config] Loaded configuration or default configuration
       # @example
       #   config = ConfigHelper.load_config
-      #   puts config.directory_weights
+      #   puts config.architectural_weights
       #   # => [{"path"=>"**/*.rb", "weight"=>1.0}]
       def load_config
         if File.exist?(DEFAULT_CONFIG_FILE)
