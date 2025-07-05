@@ -19,7 +19,7 @@ bundle exec rspec
 # Run unit tests only
 bundle exec rspec spec/unit/
 
-# Run integration tests only  
+# Run integration tests only
 bundle exec rspec spec/integration/
 
 # Run a specific test file
@@ -63,7 +63,7 @@ bundle exec code-qualia generate --directory ./smoke/sample_app --top-n 10
 Code Qualia follows a 4-stage analysis pipeline orchestrated by `CodeQualia.analyze()`:
 
 1. **Coverage Analysis** (`CoverageAnalyzer`) - Parses SimpleCov's `.resultset.json` to extract line-by-line coverage data
-2. **Complexity Analysis** (`ComplexityAnalyzer`) - Executes RuboCop to get cyclomatic complexity metrics  
+2. **Complexity Analysis** (`ComplexityAnalyzer`) - Executes RuboCop to get cyclomatic complexity metrics
 3. **Git History Analysis** (`GitAnalyzer`) - Analyzes git log to count file changes over configurable time period
 4. **Score Calculation** (`ScoreCalculator`) - Combines all data sources using weighted formula to rank methods
 
@@ -155,6 +155,12 @@ architectural_weights:
 - SimpleCov coverage data is required; tests must be run first to generate `.resultset.json`
 - RuboCop must be available (tries `bundle exec rubocop` first, falls back to `rubocop`)
 
-## Memories
+## Development Workflow
 
-- RSpec における -v オプションはバージョンを表示するオプションです。テストを実行したいときに利用するオプションではありません。
+**CRITICAL**: Always run tests after making any code changes:
+```bash
+bundle exec rspec
+```
+- ALL tests must pass before proceeding to the next task
+- Never move to the next work item if tests are failing
+- Fix any failing tests immediately after making changes
