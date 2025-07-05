@@ -31,11 +31,13 @@ RSpec.describe CodeQualia::CLI do
       end
     end
 
-    context 'with invalid format' do
+    context 'with invalid format', allow_exit: true do
       let(:argv) { ['generate', '--format', 'invalid'] }
 
       it 'exits with error message' do
-        expect { cli.send(:parse_options) }.to output(/Error: Invalid format/).to_stdout.and raise_error(SystemExit)
+        allow(cli).to receive(:exit_with_code)
+        expect { cli.send(:parse_options) }.to output(/Error: Invalid format/).to_stdout
+        expect(cli).to have_received(:exit_with_code).with(1)
       end
     end
 
@@ -93,9 +95,11 @@ RSpec.describe CodeQualia::CLI do
           method_name: 'complex_method',
           line_number: 15,
           score: 25.5,
-          coverage: 60.0,
-          complexity: 8,
-          git_commits: 3
+          details: {
+            coverage: 0.6,
+            complexity: 8,
+            git_commits: 3
+          }
         }
       ]
     end
@@ -140,6 +144,9 @@ RSpec.describe CodeQualia::CLI do
         cli = described_class.new(['generate', '--directory', '/target'])
         cli.send(:parse_options)
         
+        allow(Dir).to receive(:pwd).and_return('/original')
+        allow(CodeQualia).to receive(:analyze).and_return([])
+        
         expect(Dir).to receive(:chdir).with('/target').ordered
         expect(Dir).to receive(:chdir).with('/original').ordered
 
@@ -150,7 +157,7 @@ RSpec.describe CodeQualia::CLI do
         cli = described_class.new(['generate', '--config', 'test.yml', '--verbose'])
         cli.send(:parse_options)
         
-        expect(CodeQualia).to receive(:analyze).with('test.yml', verbose: true)
+        expect(CodeQualia).to receive(:analyze).with('test.yml', verbose: true).and_return(sample_results)
         
         expect { cli.send(:generate_analysis) }.to output.to_stdout
       end
@@ -182,31 +189,31 @@ RSpec.describe CodeQualia::CLI do
     context 'with CodeQualia::Error' do
       before do
         allow(CodeQualia).to receive(:analyze).and_raise(CodeQualia::Error, 'Test error')
-        allow(cli).to receive(:exit)
+        allow(cli).to receive(:exit_with_code)
       end
 
       it 'handles CodeQualia errors gracefully' do
         expect { cli.send(:generate_analysis) }.to output(/❌ Error: Test error/).to_stdout
-        expect(cli).to have_received(:exit).with(1)
+        expect(cli).to have_received(:exit_with_code).with(1)
       end
     end
 
     context 'with StandardError' do
       before do
         allow(CodeQualia).to receive(:analyze).and_raise(StandardError, 'Unexpected error')
-        allow(cli).to receive(:exit)
+        allow(cli).to receive(:exit_with_code)
       end
 
       it 'handles standard errors gracefully' do
         expect { cli.send(:generate_analysis) }.to output(/❌ Unexpected error: Unexpected error/).to_stdout
-        expect(cli).to have_received(:exit).with(1)
+        expect(cli).to have_received(:exit_with_code).with(1)
       end
     end
 
-    context 'when directory change fails' do
+    context 'when directory change fails', allow_exit: true do
       before do
         allow(Dir).to receive(:chdir).with('/target').and_raise(Errno::ENOENT, 'No such directory')
-        allow(cli).to receive(:exit)
+        allow(cli).to receive(:exit_with_code)
       end
 
       it 'handles directory change errors and restores original directory' do
@@ -216,7 +223,7 @@ RSpec.describe CodeQualia::CLI do
         expect(Dir).to receive(:chdir).with('/original').ordered
         
         expect { cli.send(:generate_analysis) }.to output(/❌ Unexpected error/).to_stdout
-        expect(cli).to have_received(:exit).with(1)
+        expect(cli).to have_received(:exit_with_code).with(1)
       end
     end
   end
