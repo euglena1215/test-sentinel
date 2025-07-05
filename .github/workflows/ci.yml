@@ -16,5 +16,17 @@ jobs:
         ruby-version: '3.3.1'
         bundler-cache: true
 
+    - name: Generate coverage for smoke test projects
+      run: |
+        # Generate coverage for calculator_cli
+        cd smoke/calculator_cli
+        bundle exec rspec --require spec_helper 2>/dev/null || true
+        cd ../..
+        
+        # Generate coverage for sample_app  
+        cd smoke/sample_app
+        bundle exec rspec --require spec_helper 2>/dev/null || true
+        cd ../..
+
     - name: Run RSpec
       run: bundle exec rspec
