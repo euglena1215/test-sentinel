@@ -57,7 +57,7 @@ module CodeQualia
         opts.on('--format FORMAT', String, 'Output format: human, json, csv, table (default: human)') do |format|
           unless %w[human json csv table].include?(format)
             puts "Error: Invalid format '#{format}'. Valid formats: human, json, csv, table"
-            exit 1
+            exit_with_code(1)
           end
           @options[:format] = format
         end
@@ -68,7 +68,7 @@ module CodeQualia
 
         opts.on('-h', '--help', 'Show this help message') do
           puts opts
-          exit
+          exit_with_code(0)
         end
       end
 
@@ -113,10 +113,10 @@ module CodeQualia
         end
       rescue CodeQualia::Error => e
         puts "❌ Error: #{e.message}"
-        exit 1
+        exit_with_code(1)
       rescue StandardError => e
         puts "❌ Unexpected error: #{e.message}"
-        exit 1
+        exit_with_code(1)
       ensure
         Dir.chdir(original_dir)
       end
@@ -196,10 +196,10 @@ module CodeQualia
       installer.install
     rescue CodeQualia::Error => e
       puts "❌ Error: #{e.message}"
-      exit 1
+      exit_with_code(1)
     rescue StandardError => e
       puts "❌ Unexpected error: #{e.message}"
-      exit 1
+      exit_with_code(1)
     end
 
     def show_help
@@ -212,6 +212,12 @@ module CodeQualia
       puts '  install     Setup configuration file for your project'
       puts ''
       puts "Run 'code-qualia [command] --help' for more information."
+    end
+
+    private
+
+    def exit_with_code(code)
+      exit(code)
     end
   end
 end

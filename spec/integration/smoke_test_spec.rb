@@ -35,8 +35,8 @@ RSpec.describe 'Smoke Test Integration' do
   smoke_projects.each do |project|
     describe "smoke test for #{project[:name]}" do
       before do
-        # Generate coverage data if needed
-        unless project[:is_rails]
+        # Generate coverage data for all projects (unless in CI where it's pre-generated)
+        unless ENV['CI']
           Dir.chdir(project[:dir]) do
             if File.exist?('spec/spec_helper.rb')
               `bundle exec rspec --require spec_helper 2>/dev/null || true`

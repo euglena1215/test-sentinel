@@ -36,4 +36,15 @@ RSpec.configure do |config|
   config.order = :random
 
   Kernel.srand config.seed
+
+  config.around do |example|
+    example.run
+  rescue SystemExit => e
+    # テストでSystemExitが発生した場合の処理
+    raise "Test called exit(#{e.status}) - use allow_exit: true if intentional" unless example.metadata[:allow_exit]
+
+    # 許可されたテストの場合はSystemExitを再発生させない
+    # 代わりにテストが正常終了したものとして扱う
+    nil
+  end
 end
